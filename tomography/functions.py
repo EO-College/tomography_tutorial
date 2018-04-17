@@ -4,7 +4,7 @@ import numpy as np
 from osgeo import gdal
 from scipy import ndimage
 import matplotlib.pyplot as plt
-from .ancillary import listfiles, plot_profile_horizontal
+from .ancillary import listfiles, plot_profile_horizontal, normalize, cbfi
 
 
 def read_data(img_list, outname, overwrite=False):
@@ -62,18 +62,8 @@ def topo_phase_removal(img_stack, dem_stack, outname, overwrite=False):
     :return: a matrix containing the normalized stack (numpy.ndarray)
     """
     if overwrite or not os.path.isfile(outname):
-        rows = img_stack.shape[0]
-        cols = img_stack.shape[1]
-        nTrack = img_stack.shape[2]
 
-        j_complex = complex(0, 1)
-
-        normalized_stack = np.empty((rows, cols, nTrack), np.complex64)
-        normalized_stack[:, :, 0] = img_stack[:, :, 0]
-
-        for ii in range(1, nTrack):
-            print('removing the flat-earth and the topographical phase of the slave : ' + str(ii))
-            normalized_stack[:, :, ii] = img_stack[:, :, ii] * np.exp(j_complex * dem_stack[:, :, ii])
+        normalized_stack = img_stack * np.exp(complex(0, 1) * dem_stack, dtype=np.complex64)
 
         # save the variable
         with open(outname, 'wb') as f:
@@ -86,7 +76,7 @@ def topo_phase_removal(img_stack, dem_stack, outname, overwrite=False):
 
 def calculate_covariance_matrix(img_stack, outname, kernelsize=10, overwrite=False):
     """
-    calculate coherence &  covariance matrix
+    calculate covariance matrix
 
     :param img_stack: the image stack (numpy.ndarray)
     :param outname: the name of the file to be written (str)
@@ -94,32 +84,30 @@ def calculate_covariance_matrix(img_stack, outname, kernelsize=10, overwrite=Fal
     :param overwrite: overwrite an existing file? Otherwise it is read from file and returned. (bool)
     :return: the covariance matrix (numpy.ndarray)
     """
-    if overwrite or not os.path.isfile(outname):
-        rows = img_stack.shape[0]
-        cols = img_stack.shape[1]
-        nTrack = img_stack.shape[2]
 
-        j_complex = complex(0, 1)
+    if overwrite or not os.path.isfile(outname):
+        rows, cols, nTrack = img_stack.shape
 
         kernel = np.ones((kernelsize, kernelsize))
-        cov_matrix = np.empty((rows, cols, nTrack, nTrack), np.complex64)
         weight = kernel / np.sum(kernel)
 
-        for ii in range(0, nTrack):
-            for jj in range(0, nTrack):
-                img1 = img_stack[:, :, ii]
-                img2 = img_stack[:, :, jj]
-                ms = np.multiply(img1, np.conjugate(img2))  # multiply S1 and complex conjugate of S2
-                mm = np.absolute(img1) ** 2
-                ss = np.absolute(img2) ** 2
-                ms_smooth = ndimage.convolve(ms.real, weight, mode='reflect') + \
-                            j_complex * ndimage.convolve(ms.imag, weight, mode='reflect')
-                mm_smooth = ndimage.convolve(mm, weight, mode='reflect')
-                ss_smooth = ndimage.convolve(ss, weight, mode='reflect')
+        cov_matrix = np.empty((rows, cols, nTrack, nTrack), np.complex64)
+        smooth = np.empty((rows, cols, nTrack), np.float32)
 
-                coherence = np.divide(ms_smooth, (np.sqrt(np.multiply(mm_smooth, ss_smooth))))
+        for i in range(0, nTrack):
+            mm = np.absolute(img_stack[:, :, i]) ** 2
+            smooth[:, :, i] = ndimage.convolve(mm, weight, mode='reflect')
 
-                cov_matrix[:, :, ii, jj] = coherence
+        for i in range(0, nTrack):
+            for j in range(0, nTrack):
+                # multiply S1 and complex conjugate of S2
+                ms = np.multiply(img_stack[:, :, i], np.conjugate(img_stack[:, :, j]))
+
+                ms_real_smooth = ndimage.convolve(ms.real, weight, mode='reflect')
+                ms_imag_smooth = complex(0, 1) * ndimage.convolve(ms.imag, weight, mode='reflect')
+                ms_smooth = ms_real_smooth + ms_imag_smooth
+
+                cov_matrix[:, :, i, j] = ms_smooth / (smooth[:, :, i] * smooth[:, :, j]) ** 0.5
 
         # save the variable
         with open(outname, 'wb') as f:
@@ -141,42 +129,18 @@ def capon_beam_forming_inversion(covmatrix, kz_array, outname, height=70, overwr
     :return: the computed matrix (numpy.ndarray)
     """
     if overwrite or not os.path.isfile(outname):
-        z_vector = np.matrix(np.arange(-height, height + 1, 1))
-        h = z_vector.shape[1]
-        rows = covmatrix.shape[0]
-        cols = covmatrix.shape[1]
-        nTrack = covmatrix.shape[2]
-        capon_bf = np.empty((rows, cols, h), np.complex64)
 
-        j_complex = complex(0, 1)
+        rows, cols, nTrack = covmatrix.shape[0:3]
 
-        # define the loading factor
-        load_fac = (1 / 25.) * np.identity(nTrack)
+        # reshape and stack the input arrays for easier vectorization
+        stack = np.empty((rows, cols, nTrack + nTrack ** 2), np.complex64)
+        stack[:, :, 0:(nTrack ** 2)] = covmatrix.reshape((rows, cols, nTrack ** 2))
+        stack[:, :, (nTrack ** 2):] = kz_array
 
-        for ii_az in range(0, rows):
-            for ii_rg in range(0, cols):
-                kz = np.transpose([kz_array[ii_az, ii_rg, :]])
-                r0 = covmatrix[ii_az, ii_rg, :, :]
+        # perform the actual computations
+        capon_bf = np.apply_along_axis(cbfi, axis=2, arr=stack, nTrack=nTrack, height=height)
 
-                # define the steering matrix
-                a_steer = np.exp(np.dot(j_complex * kz, z_vector))
-
-                # define the numerator of the filter habf
-                hnum = np.dot(np.linalg.inv(r0 + load_fac), a_steer)
-
-                # define the denominator of the filter habf
-                hden0 = np.diag(np.dot(np.conjugate(np.transpose(a_steer)), hnum))
-
-                # replicate the diagonal by number of Tracks
-                hden = np.zeros((nTrack, h), dtype=np.complex64)
-                for i in range(nTrack):
-                    hden[i] = hden0
-
-                h_abf = np.divide(hnum, hden)
-
-                capon_bf[ii_az, ii_rg, :] = np.diag(np.dot(np.dot(np.conjugate(np.transpose(h_abf)), r0), h_abf))
-
-        capon_bf = np.real(capon_bf)
+        capon_bf = np.real(capon_bf).astype(np.float32)
         with open(outname, 'wb') as f:
             pickle.dump(capon_bf, f, 2)
     else:
@@ -203,15 +167,7 @@ def plot_tomo_slices(capon_bf, height=70, outpath=None):
         if not os.path.exists(subdir):
             os.makedirs(subdir)
 
-    # normalize the values for each pixel
-    caponnorm = np.empty((rows, cols, h), np.float_)
-
-    for ii_az in range(0, rows):
-        for ii_rg in range(0, cols):
-            capon = capon_bf[ii_az, ii_rg, :]
-            caponmax = np.amax(capon)
-            caponmin = np.amin(capon)
-            caponnorm[ii_az, ii_rg, :] = np.divide((capon - caponmin), (caponmax - caponmin))
+    caponnorm = np.apply_along_axis(normalize, 2, capon_bf)
 
     ylab = 'height [m]'
 
@@ -283,7 +239,7 @@ def plot_profiles(capon_bf, pixels, height=70, outpath=None, plot_separate=False
     if not plot_separate:
         if outpath:
             existing = listfiles(outpath, 'reflectivity_profile_stack_[0-9]{2}.png')
-            fname = os.path.join(outpath + 'reflectivity_profile_stack_{:02}.png'.format(len(existing)+1))
+            fname = os.path.join(outpath + 'reflectivity_profile_stack_{:02}.png'.format(len(existing) + 1))
             plt.savefig(fname, dpi=1000)
         else:
             plt.show()

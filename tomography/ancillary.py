@@ -33,6 +33,19 @@ def plot_profile_horizontal(slice, height, xlab, ylab, title, outname=None):
         plt.show()
 
 
+def plot_image(slice, xlab='range', ylab='azimuth', title='', outname=None):
+    plt.imshow(slice, origin='upper', cmap='jet')
+    plt.xlabel(xlab, fontsize=12)
+    plt.ylabel(ylab, fontsize=12)
+    plt.title(title, fontsize=12)
+    plt.colorbar()
+    if outname:
+        plt.savefig(outname, dpi=1000)
+        plt.close()
+    else:
+        plt.show()
+
+
 def listfiles(path, pattern):
     """
     list files in a directory whose names match a regular expression
@@ -63,3 +76,47 @@ def sample(midr, mida, inrange=1):
     az_range = range(mida - inrange // 2, mida + inrange // 2 + 1)
     list_pixels = [(rg, az) for rg in rg_range for az in az_range]
     return list_pixels
+
+
+def normalize(slice):
+    """
+
+    Parameters
+    ----------
+    slice: ndarray
+        a 1d input array to be normalized
+    Returns
+    out: ndarray
+        the normalized array
+    -------
+
+    """
+    max = np.amax(slice)
+    min = np.amin(slice)
+    return np.divide((slice - min), (max - min))
+
+
+def cbfi(slice, nTrack, height):
+    kz = np.transpose([slice[(nTrack ** 2):]])
+    r0 = slice[0:(nTrack ** 2)].reshape((nTrack, nTrack))
+
+    z_vector = np.matrix(np.arange(-height, height + 1, 1))
+
+    # define the loading factor
+    load_fac = (1 / 25.) * np.identity(nTrack)
+
+    # define the steering matrix
+    a_steer = np.exp(np.dot(complex(0, 1) * kz, z_vector))
+
+    # define the numerator of the filter habf
+    hnum = np.dot(np.linalg.inv(r0 + load_fac), a_steer)
+
+    # define the denominator of the filter habf
+    hden0 = np.diag(np.dot(np.conjugate(np.transpose(a_steer)), hnum))
+
+    # replicate the diagonal by number of Tracks
+    hden = np.array([hden0] * nTrack, dtype=np.complex64)
+
+    h_abf = np.divide(hnum, hden)
+
+    return np.diag(np.dot(np.dot(np.conjugate(np.transpose(h_abf)), r0), h_abf))

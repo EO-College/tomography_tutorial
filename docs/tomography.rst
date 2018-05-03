@@ -1,8 +1,8 @@
 API documentation
 =================
 
-Drivers
-=======
+functions
+============
 
 The core functions of the tomography package.
 

@@ -6,9 +6,13 @@
 Welcome to tomography's documentation!
 ======================================
 
+Contents:
+
+This is the documentation of tomography.
+
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+
+   tomography
 
 
 

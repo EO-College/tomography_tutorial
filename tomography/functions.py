@@ -7,26 +7,33 @@ import matplotlib.pyplot as plt
 from .ancillary import listfiles, plot_profile_horizontal, normalize, cbfi
 
 
-def read_data(img_list, outname, overwrite=False):
+def read_data(input, outname, overwrite=False):
     """
-    read the input data
+    read the raw input data to numpy arrays and write the results
 
-    :param img_list: a list of image files
-    :param outname: the name of the file to be written
-    :param overwrite: overwrite an existing file? Otherwise it is read from file and returned.
-    :return: an array containing the stacked images (numpy.ndarray)
+    Parameters
+    ----------
+    input: str or list
+        a single image file name or a list of multiple files
+    outname: str
+        the name of the file to be written. Default is False.
+    overwrite: bool
+        overwrite an existing file? Otherwise it is read from file and returned. Default is False.
+    Returns
+    -------
+    out: numpy.ndarray
+        a 2D (one file) or 3D (multiple files) array
     """
 
     if overwrite or not os.path.isfile(outname):
-        if len(img_list) == 0:
+        if len(input) == 0:
             raise RuntimeError('img_list is empty')
-        fil = img_list[0]
-        imgfile = gdal.Open(fil)
+
+        imgfile = gdal.Open(input[0])
         rows = imgfile.RasterYSize
         cols = imgfile.RasterXSize
-        band = imgfile.GetRasterBand(1)
+        dtype = gdal.GetDataTypeName(imgfile.GetRasterBand(1).DataType)
         imgfile = None
-        dtype = gdal.GetDataTypeName(band.DataType)
 
         if dtype == 'CFloat32':
             offset = 0
@@ -35,8 +42,8 @@ def read_data(img_list, outname, overwrite=False):
         else:
             raise RuntimeError('data type must be either "CFloat32" or "Float32"')
 
-        img_stack = np.empty((rows, cols, len(img_list) + offset), np.complex64)
-        for ii, img_path in enumerate(img_list):
+        img_stack = np.empty((rows, cols, len(input) + offset), np.complex64)
+        for ii, img_path in enumerate(input):
             # Read the image file into the array
             imgfile = gdal.Open(img_path)
             img_stack[:, :, ii + offset] = imgfile.ReadAsArray()

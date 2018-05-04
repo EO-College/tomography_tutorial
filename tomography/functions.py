@@ -21,7 +21,7 @@ def read_data(input, outname, overwrite=False):
 
     Returns
     -------
-    out: numpy.ndarray
+    numpy.ndarray
         a 2D (one file) or 3D (multiple files) array
     """
 
@@ -71,11 +71,11 @@ def topo_phase_removal(img_stack, dem_stack, outname, overwrite=False):
     outname: str
         the name of the file to be written
     overwrite: bool
-        overwrite an existing file? Otherwise it is read from file and returned. Default is False
+        overwrite an existing file? Otherwise it is read from file and returned
 
     Returns
     -------
-    normalized_stack: numpy.ndarray
+    numpy.ndarray
         the normalized SLC stack
     """
     if overwrite or not os.path.isfile(outname):
@@ -104,11 +104,11 @@ def calculate_covariance_matrix(img_stack, outname, kernelsize=10, overwrite=Fal
     kernelsize: int
         the boxcar smoothing dimension
     overwrite: bool
-        overwrite an existing file? Otherwise it is read from file and returned. Default is False
+        overwrite an existing file? Otherwise it is read from file and returned
 
-    Returns:
+    Returns
     -------
-    cov_matrix: numpy.ndarray
+    numpy.ndarray
         the covariance matrix
     """
 
@@ -160,11 +160,11 @@ def capon_beam_forming_inversion(covmatrix, kz_array, outname, height=70, overwr
     height: int
         the maximum inversion height
     overwrite: bool
-        overwrite an existing file? Otherwise it is read from file and returned. Default is False
+        overwrite an existing file? Otherwise it is read from file and returned
 
     Returns
     -------
-    capon_bf: numpy.ndarray
+    numpy.ndarray
         the tomographic array
     """
     if overwrite or not os.path.isfile(outname):

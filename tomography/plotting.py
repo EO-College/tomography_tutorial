@@ -6,22 +6,25 @@ from ipywidgets import IntSlider, Checkbox, Button, Layout, HBox, interactive_ou
 
 
 class DataViewer(object):
-    def __init__(self, slc_list, phase_list, kz_list, slc_stack, phase_stack, kz_stack):
-        """
-        functionality for displaying the input data (SLC, topographic phase and wave number)
+    """
+    functionality for displaying the input data (SLC, topographic phase and wave number)
 
-        Parameters
-        ----------
-        slc_list: list
-            a list containing the names of the SLC input files
-        phase_list: list
-            a list containing the names of the topographic phase input files
-        kz_list: list
-            a list containing the names of the SLC input files
-        slc_stack
-        phase_stack
-        kz_stack
-        """
+    Parameters
+    ----------
+    slc_list: list
+        the names of the SLC input files
+    phase_list: list
+        the names of the topographic phase input files
+    kz_list: list
+        the names of the SLC input files
+    slc_stack: numpy.ndarray
+        the SLC images
+    phase_stack: numpy.ndarray
+        the topographic phase images
+    kz_stack: numpy.ndarray
+        the wave number images
+    """
+    def __init__(self, slc_list, phase_list, kz_list, slc_stack, phase_stack, kz_stack):
         self.slc_list = slc_list
         self.phase_list = phase_list
         self.kz_list = kz_list
@@ -69,9 +72,8 @@ class DataViewer(object):
         h: int
             the slider value
 
-        Returns: None
+        Returns
         -------
-
         """
         slc_name = os.path.basename(self.slc_list[h])
         phase_name = os.path.basename(self.phase_list[h - 1])
@@ -81,7 +83,7 @@ class DataViewer(object):
         self.ax3.set_title('wavenumber: {}'.format(kz_name), fontsize=12)
         # logarithmic scaling of SLC amplitude
         amp_log = 10 * np.log10(np.absolute(self.slc_stack[:, :, h]))
-        # computation if image percentiles for linear image stretching
+        # computation of image percentiles for linear image stretching
         p02, p98 = np.percentile(amp_log, (2, 98))
         self.ax1.imshow(amp_log, cmap='gray', vmin=p02, vmax=p98)
         self.ax2.imshow(np.absolute(self.phase_stack[:, :, h]))
@@ -180,15 +182,16 @@ class Tomographyplot(object):
     def reset_crosshair(self, range, azimuth):
         """
         redraw the cross-hair on the horizontal slice plot
+
         Parameters
         ----------
         range: int
             the range image coordinate
         azimuth: int
             the azimuth image coordinate
-        Returns: None
-        -------
 
+        Returns
+        -------
         """
         self.lhor.set_ydata(azimuth)
         self.lver.set_xdata(range)
@@ -197,9 +200,9 @@ class Tomographyplot(object):
     def init_vertical_plot(self):
         """
         set up the vertical profile plot
-        Returns: None
-        -------
 
+        Returns
+        -------
         """
         # clear the plot if lines have already been drawn on it
         if len(self.ax2.lines) > 0:
@@ -218,9 +221,8 @@ class Tomographyplot(object):
         ----------
         h: int
             the slider value
-        Returns: None
+        Returns
         -------
-
         """
         p1 = self.ax1.imshow(self.caponnorm[:, :, self.height - h], origin='upper', cmap='jet')
         self.ax1.set_xlabel('range', fontsize=12)
@@ -236,16 +238,14 @@ class Tomographyplot(object):
 
     def onclick(self, event):
         """
-        respond to mouse clicks in the plot
+        respond to mouse clicks in the plot.
         This function responds to clicks on the first (horizontal slice) plot and updates the vertical profile and
         slice plots
 
         Parameters
         ----------
-        event: the click event object containing image coordinates
-
-        Returns: None
-        -------
+        event: matplotlib.backend_bases.MouseEvent
+            the click event object containing image coordinates
 
         """
         # only do something if the first plot has been clicked on

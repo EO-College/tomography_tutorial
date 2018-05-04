@@ -6,16 +6,17 @@
 # full list see the documentation:
 # http://www.sphinx-doc.org/en/master/config
 
+import os
+import sys
+import mock
+
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
-
+sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
@@ -24,21 +25,18 @@ copyright = '2018, Nesrin Salepci, John Truckenbrodt'
 author = 'Nesrin Salepci, John Truckenbrodt'
 
 # The short X.Y version
-version = ''
+version = '0.1'
 # The full version, including alpha/beta/rc tags
 release = '0.1'
-
-import sys
-import os
-import mock
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath('..') + os.sep)
+# import os
+# sys.path.insert(0, os.path.abspath('..') + os.sep)
 
 # -- General configuration ---------------------------------------------------
-MOCK_MODULES = ['osgeo', 'numpy', 'IPython.display', 'ipywidgets', 'scipy', 'matplotlib', 'matplotlib.pyplot']  # This should be changed.
+MOCK_MODULES = ['osgeo', 'numpy', 'IPython.display', 'ipywidgets', 'scipy', 'matplotlib', 'matplotlib.pyplot']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -124,6 +122,8 @@ html_static_path = ['_static']
 #
 # html_sidebars = {}
 
+# If false, no index is generated.
+html_use_index = True
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
@@ -155,8 +155,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'tomography.tex', 'tomography Documentation',
-     'Nesrin Salepci, John Truckenbrodt', 'manual'),
+    (master_doc, 'tomography.tex', u'tomography Documentation',
+     author, 'manual'),
 ]
 
 
@@ -165,7 +165,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'tomography', 'tomography Documentation',
+    (master_doc, 'tomography', u'tomography Documentation',
      [author], 1)
 ]
 
@@ -176,7 +176,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'tomography', 'tomography Documentation',
+    (master_doc, 'tomography', u'tomography Documentation',
      author, 'tomography', 'One line description of project.',
      'Miscellaneous'),
 ]

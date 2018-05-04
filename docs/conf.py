@@ -16,7 +16,8 @@ import mock
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-sys.path.insert(0, os.path.abspath('.'))
+# sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('..') + os.sep)
 
 # -- Project information -----------------------------------------------------
 
@@ -28,12 +29,6 @@ author = 'Nesrin Salepci, John Truckenbrodt'
 version = '0.1'
 # The full version, including alpha/beta/rc tags
 release = '0.1'
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-# import os
-# sys.path.insert(0, os.path.abspath('..') + os.sep)
 
 # -- General configuration ---------------------------------------------------
 MOCK_MODULES = ['osgeo', 'numpy', 'IPython.display', 'ipywidgets', 'scipy', 'matplotlib', 'matplotlib.pyplot']

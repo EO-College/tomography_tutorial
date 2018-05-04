@@ -28,9 +28,19 @@ version = ''
 # The full version, including alpha/beta/rc tags
 release = '0.1'
 
+import sys
+import os
+# import mock
+
+# If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+sys.path.insert(0, os.path.abspath('..') + os.sep)
 
 # -- General configuration ---------------------------------------------------
-
+# MOCK_MODULES = ['__future__', 'osgeo', 'osgeo.gdal', 'osgeo.osr', 'osgeo.gdalconst']  # This should be changed.
+# for mod_name in MOCK_MODULES:
+#     sys.modules[mod_name] = mock.Mock()
 # If your documentation needs a minimal Sphinx version, state it here.
 #
 # needs_sphinx = '1.0'

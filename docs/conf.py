@@ -31,7 +31,7 @@ version = '0.1'
 release = '0.1'
 
 # -- General configuration ---------------------------------------------------
-MOCK_MODULES = ['osgeo', 'numpy', 'IPython.display', 'ipywidgets', 'scipy', 'matplotlib', 'matplotlib.pyplot']
+MOCK_MODULES = ['osgeo', 'numpy', 'IPython', 'IPython.display', 'ipywidgets', 'scipy', 'matplotlib', 'matplotlib.pyplot']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 # If your documentation needs a minimal Sphinx version, state it here.

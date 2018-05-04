@@ -30,7 +30,7 @@ release = '0.1'
 
 import sys
 import os
-# import mock
+import mock
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -38,9 +38,9 @@ import os
 sys.path.insert(0, os.path.abspath('..') + os.sep)
 
 # -- General configuration ---------------------------------------------------
-# MOCK_MODULES = ['__future__', 'osgeo', 'osgeo.gdal', 'osgeo.osr', 'osgeo.gdalconst']  # This should be changed.
-# for mod_name in MOCK_MODULES:
-#     sys.modules[mod_name] = mock.Mock()
+MOCK_MODULES = ['osgeo', 'numpy', 'IPython', 'ipywidgets', 'scipy']  # This should be changed.
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = mock.Mock()
 # If your documentation needs a minimal Sphinx version, state it here.
 #
 # needs_sphinx = '1.0'

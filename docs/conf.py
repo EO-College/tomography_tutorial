@@ -38,7 +38,7 @@ import mock
 sys.path.insert(0, os.path.abspath('..') + os.sep)
 
 # -- General configuration ---------------------------------------------------
-MOCK_MODULES = ['osgeo', 'numpy', 'IPython', 'ipywidgets', 'scipy', 'matplotlib']  # This should be changed.
+MOCK_MODULES = ['osgeo', 'numpy', 'IPython.display', 'ipywidgets', 'scipy', 'matplotlib', 'matplotlib.pyplot']  # This should be changed.
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 # If your documentation needs a minimal Sphinx version, state it here.

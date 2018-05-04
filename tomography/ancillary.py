@@ -26,35 +26,6 @@ def listfiles(path, pattern):
     return sorted([os.path.join(path, x) for x in os.listdir(path) if re.search(pattern, x)])
 
 
-def sample(midr, mida, inrange=1):
-    """
-    generate range and azimuth indices for drawing a set of reflectivity profiles
-
-    Parameters
-    ----------
-    midr: int
-        the range pixel coordinate
-    mida: int
-        the azimuth pixel coordinate
-    inrange: int
-        the range of pixels to select around the central pixel; if set to 1 (default) only the central pixel is returned
-    Returns
-    -------
-    list
-        a list of tuples containing range and azimuth coordinates
-    Example
-    -------
-    >>> sample(30, 17, 3)
-    [(29, 16), (29, 17), (29, 18), (30, 16), (30, 17), (30, 18), (31, 16), (31, 17), (31, 18)]
-    """
-    if inrange % 2 == 0:
-        raise RuntimeError('parameter inrange must be odd')
-    rg_range = range(midr - inrange // 2, midr + inrange // 2 + 1)
-    az_range = range(mida - inrange // 2, mida + inrange // 2 + 1)
-    out = [(rg, az) for rg in rg_range for az in az_range]
-    return out
-
-
 def normalize(slice):
     """
     normalize a 1D array by its minimum and maximum values:
@@ -64,7 +35,7 @@ def normalize(slice):
 
     Parameters
     ----------
-    slice: ndarray
+    slice: numpy.ndarray
         a 1d input array to be normalized
 
     Returns

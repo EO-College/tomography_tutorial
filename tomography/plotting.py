@@ -93,10 +93,16 @@ class DataViewer(object):
 class Tomographyplot(object):
     """
     functionality for creating the main tomography analysis plot
+
+    Parameters
+    ----------
+    capon_bf_abs: numpy.ndarray
+        the absolute result of the capon beam forming inversion
+    caponnorm
+        the normalized version of ``capon_bf_abs``; see :func:`~tomography.ancillary.normalize`.
     """
 
     def __init__(self, capon_bf_abs, caponnorm):
-
         if not caponnorm.shape == capon_bf_abs.shape:
             raise RuntimeError('mismatch of input arrays')
 

@@ -8,7 +8,7 @@ from .ancillary import cbfi
 
 def read_data(input, outname, overwrite=False):
     """
-    read the raw input data to numpy arrays and write the results
+    read the raw input data into a numpy array and write the results
 
     Parameters
     ----------
@@ -17,7 +17,7 @@ def read_data(input, outname, overwrite=False):
     outname: str
         the name of the file to be written. Default is False
     overwrite: bool
-        overwrite an existing file? Otherwise it is read from file and returned. Default is False
+        overwrite an existing file? Otherwise it is read from file and returned
 
     Returns
     -------

@@ -15,9 +15,10 @@ def read_data(input, outname, overwrite=False):
     input: str or list
         a single image file name or a list of multiple files
     outname: str
-        the name of the file to be written. Default is False.
+        the name of the file to be written. Default is False
     overwrite: bool
-        overwrite an existing file? Otherwise it is read from file and returned. Default is False.
+        overwrite an existing file? Otherwise it is read from file and returned. Default is False
+
     Returns
     -------
     out: numpy.ndarray
@@ -70,12 +71,12 @@ def topo_phase_removal(img_stack, dem_stack, outname, overwrite=False):
     outname: str
         the name of the file to be written
     overwrite: bool
-        overwrite an existing file? Otherwise it is read from file and returned.
+        overwrite an existing file? Otherwise it is read from file and returned. Default is False
+
     Returns
+    -------
     normalized_stack: numpy.ndarray
         the normalized SLC stack
-    -------
-
     """
     if overwrite or not os.path.isfile(outname):
 
@@ -103,12 +104,12 @@ def calculate_covariance_matrix(img_stack, outname, kernelsize=10, overwrite=Fal
     kernelsize: int
         the boxcar smoothing dimension
     overwrite: bool
-        overwrite an existing file? Otherwise it is read from file and returned.
+        overwrite an existing file? Otherwise it is read from file and returned. Default is False
 
     Returns:
+    -------
     cov_matrix: numpy.ndarray
         the covariance matrix
-    -------
     """
 
     if overwrite or not os.path.isfile(outname):
@@ -159,12 +160,12 @@ def capon_beam_forming_inversion(covmatrix, kz_array, outname, height=70, overwr
     height: int
         the maximum inversion height
     overwrite: bool
-        overwrite an existing file? Otherwise it is read from file and returned.
+        overwrite an existing file? Otherwise it is read from file and returned. Default is False
+
     Returns
+    -------
     capon_bf: numpy.ndarray
         the tomographic array
-    -------
-
     """
     if overwrite or not os.path.isfile(outname):
 

@@ -3,8 +3,7 @@ import pickle
 import numpy as np
 from osgeo import gdal
 from scipy import ndimage
-import matplotlib.pyplot as plt
-from .ancillary import listfiles, plot_profile_horizontal, normalize, cbfi
+from .ancillary import cbfi
 
 
 def read_data(input, outname, overwrite=False):
@@ -62,11 +61,21 @@ def topo_phase_removal(img_stack, dem_stack, outname, overwrite=False):
     """
     Removal of Topographical Phase
 
-    :param img_stack: the image stack (numpy.ndarray)
-    :param dem_stack: (numpy.ndarray)
-    :param outname: the name of the file to be written (str)
-    :param overwrite: overwrite an existing file? Otherwise it is read from file and returned. (bool)
-    :return: a matrix containing the normalized stack (numpy.ndarray)
+    Parameters
+    ----------
+    img_stack: numpy.ndarray
+        the SLC image stack
+    dem_stack: numpy.ndarray
+        the image stack containing flat earth and topographic phase
+    outname: str
+        the name of the file to be written
+    overwrite: bool
+        overwrite an existing file? Otherwise it is read from file and returned.
+    Returns
+    normalized_stack: numpy.ndarray
+        the normalized SLC stack
+    -------
+
     """
     if overwrite or not os.path.isfile(outname):
 
@@ -83,13 +92,23 @@ def topo_phase_removal(img_stack, dem_stack, outname, overwrite=False):
 
 def calculate_covariance_matrix(img_stack, outname, kernelsize=10, overwrite=False):
     """
-    calculate covariance matrix
+    compute the covariance matrix
 
-    :param img_stack: the image stack (numpy.ndarray)
-    :param outname: the name of the file to be written (str)
-    :param kernelsize: the boxcar smoothing dimension (int)
-    :param overwrite: overwrite an existing file? Otherwise it is read from file and returned. (bool)
-    :return: the covariance matrix (numpy.ndarray)
+    Parameters
+    ----------
+    img_stack: numpy.ndarray
+        the normalized SLC image stack
+    outname: str
+       the name of the file to be written
+    kernelsize: int
+        the boxcar smoothing dimension
+    overwrite: bool
+        overwrite an existing file? Otherwise it is read from file and returned.
+
+    Returns:
+    cov_matrix: numpy.ndarray
+        the covariance matrix
+    -------
     """
 
     if overwrite or not os.path.isfile(outname):
@@ -127,13 +146,25 @@ def calculate_covariance_matrix(img_stack, outname, kernelsize=10, overwrite=Fal
 
 def capon_beam_forming_inversion(covmatrix, kz_array, outname, height=70, overwrite=False):
     """
+    perform the capon beam forming inversion to create the final tomographic result
 
-    :param covmatrix:(numpy.ndarray)
-    :param kz_array:(numpy.ndarray)
-    :param height: the maximum inversion height (int)
-    :param outname: the name of the file to be written (str)
-    :param overwrite: overwrite an existing file? Otherwise it is read from file and returned. (bool)
-    :return: the computed matrix (numpy.ndarray)
+    Parameters
+    ----------
+    covmatrix: numpy.ndarray
+        the covariance matrix
+    kz_array: numpy.ndarray
+        the wave number stack
+    outname: str
+        the name of the file to be written
+    height: int
+        the maximum inversion height
+    overwrite: bool
+        overwrite an existing file? Otherwise it is read from file and returned.
+    Returns
+    capon_bf: numpy.ndarray
+        the tomographic array
+    -------
+
     """
     if overwrite or not os.path.isfile(outname):
 
@@ -154,99 +185,3 @@ def capon_beam_forming_inversion(covmatrix, kz_array, outname, height=70, overwr
         with open(outname, 'rb') as f:
             capon_bf = pickle.load(f)
     return capon_bf
-
-
-def plot_tomo_slices(capon_bf, height=70, outpath=None):
-    """
-    plot slices parallel to azimutha and range as well as horizontal images
-
-    :param capon_bf:
-    :param height: the maximum inversion height (int)
-    :param outpath: the path to write the plots to (png format); if not defined the plots are only displayed (str)
-    :return: None
-    """
-    rows = capon_bf.shape[0]
-    cols = capon_bf.shape[1]
-    h = capon_bf.shape[2]
-
-    if outpath:
-        subdir = os.path.join(outpath, 'tomo_slices')
-        if not os.path.exists(subdir):
-            os.makedirs(subdir)
-
-    caponnorm = np.apply_along_axis(normalize, 2, capon_bf)
-
-    ylab = 'height [m]'
-
-    # slices parallel to range
-    xlab = 'range pixel'
-    for ii_az in range(0, rows, 100):
-        title = 'range slice at range line ' + str(ii_az)
-        if outpath:
-            outname = os.path.join(subdir, 'range_slice_pix_{}.png'.format(ii_az))
-        else:
-            outname = None
-        plot_profile_horizontal(caponnorm[ii_az, :, :], height, xlab, ylab, title, outname)
-
-    # slices parallel to azimuth
-    xlab = 'azimuth pixel'
-    for ii_rg in range(0, cols, 100):
-        title = 'azimuth slice at range line ' + str(ii_rg)
-        if outpath:
-            outname = os.path.join(subdir, 'azimuth_slice_pix_{}.png'.format(ii_rg))
-        else:
-            outname = None
-        plot_profile_horizontal(caponnorm[:, ii_rg, :], height, xlab, ylab, title, outname)
-
-    # horizontal slices
-    for ii_h in range(0, h, 10):
-        caponplot_h = caponnorm[:, :, ii_h]
-        plt.imshow(caponplot_h, origin='upper', cmap='jet')
-        plt.xlabel('range', fontsize=12)
-        plt.ylabel('azimuth', fontsize=12)
-        plt.title('horizontal slice at height ' + str(height - ii_h) + ' m', fontsize=12)
-        if outpath:
-            print('writing a png file for the horizontal slice at height {}'.format(height - ii_h))
-            fname = os.path.join(subdir, 'horizontal_{}.png'.format(height - ii_h))
-            plt.savefig(fname)
-            plt.close()
-        else:
-            plt.show()
-
-
-def plot_profiles(capon_bf, pixels, height=70, outpath=None, plot_separate=False):
-    """
-    plot vertical backscatter profiles
-
-    :param capon_bf: the capon beam forming inversion result
-    :param pixels: a list of pixel range-azimuth coordinate tuples
-    :param height: the maximum inversion height (int)
-    :param outpath: the path to write the plots to (png format);
-        if not defined the plots are only displayed
-    :param plot_separate: plot each ref. profiles separately?
-    :return: None
-    """
-
-    for rgpix, azpix in pixels:
-        x = np.flipud(capon_bf[azpix, rgpix, :])
-        y = np.arange(-height, height + 1, 1)
-        plt.plot(x, y, label='pixel at rg_{0}_az_{1}'.format(rgpix, azpix))
-        plt.ylim(-height, height)
-        plt.xlabel('reflectivity')
-        plt.ylabel('height [m]')
-        plt.title('reflectivity profiles')
-        plt.legend(loc=0, prop={'size': 7}, markerscale=1)
-        if plot_separate:
-            if outpath:
-                basename = 'reflectivity_profile_rg_{0}_az_{1}.png'.format(rgpix, azpix)
-                fname = os.path.join(outpath, basename)
-                plt.savefig(fname, dpi=1000)
-            else:
-                plt.show()
-    if not plot_separate:
-        if outpath:
-            existing = listfiles(outpath, 'reflectivity_profile_stack_[0-9]{2}.png')
-            fname = os.path.join(outpath + 'reflectivity_profile_stack_{:02}.png'.format(len(existing) + 1))
-            plt.savefig(fname, dpi=1000)
-        else:
-            plt.show()

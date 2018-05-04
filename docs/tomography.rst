@@ -1,7 +1,4 @@
-API documentation
-=================
-
-functions
+main functions
 ============
 
 The core functions of the tomography package.

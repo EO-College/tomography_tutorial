@@ -20,8 +20,8 @@ def listfiles(path, pattern):
         a list of absolute file names
     Example
     -------
-    >>> listfiles('/path/to/some/data', 'file[0-9].tif')
-    ['/path/to/some/data/file1.tif', '/path/to/some/data/file2.tif', '/path/to/some/data/file3.tif']
+    >>> listfiles('/path/to/somedata', 'file[0-9].tif')
+    ['/path/to/somedata/file1.tif', '/path/to/somedata/file2.tif', '/path/to/somedata/file3.tif']
     """
     return sorted([os.path.join(path, x) for x in os.listdir(path) if re.search(pattern, x)])
 

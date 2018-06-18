@@ -16,7 +16,7 @@ class DataViewer(object):
     phase_list: list
         the names of the topographic phase input files
     kz_list: list
-        the names of the SLC input files
+        the names of the Kappa-Zeta topographic phase input files
     slc_stack: numpy.ndarray
         the SLC images
     phase_stack: numpy.ndarray
@@ -59,11 +59,11 @@ class DataViewer(object):
         self.ax3 = self.fig.add_subplot(133)
 
         # enable interaction with the slider
-        out = interactive_output(self.onslide, {'h': self.slider})
+        out = interactive_output(self.__onslide, {'h': self.slider})
 
         plt.tight_layout()
 
-    def onslide(self, h):
+    def __onslide(self, h):
         """
         a function to respond to slider value changes
 
@@ -122,7 +122,7 @@ class Tomographyplot(object):
 
         # a button to clear the vertical profile plot
         self.clearbutton = Button(description='clear vertical plot')
-        self.clearbutton.on_click(lambda x: self.init_vertical_plot())
+        self.clearbutton.on_click(lambda x: self.__init_vertical_plot())
 
         # define some options for display of the widget box
         layout = Layout(
@@ -161,17 +161,17 @@ class Tomographyplot(object):
         plt.setp([self.ax3, self.ax4], yticklabels=ytick_lab, yticks=ytick_pos)
 
         # set up the vertical profile plot
-        self.init_vertical_plot()
+        self.__init_vertical_plot()
 
         # add a cross-hair to the horizontal slice plot
         self.lhor = self.ax1.axhline(0, linewidth=1, color='r')
         self.lver = self.ax1.axvline(0, linewidth=1, color='r')
 
-        # make the figure respond to mouse clicks by executing function onclick
-        self.cid1 = self.fig.canvas.mpl_connect('button_press_event', self.onclick)
+        # make the figure respond to mouse clicks by executing method __onclick
+        self.cid1 = self.fig.canvas.mpl_connect('button_press_event', self.__onclick)
 
         # enable interaction with the slider
-        out = interactive_output(self.onslide, {'h': self.slider})
+        out = interactive_output(self.__onslide, {'h': self.slider})
         #############################################################################################
         # general formatting
 
@@ -185,7 +185,7 @@ class Tomographyplot(object):
         plt.tight_layout(pad=1.0, w_pad=0.1, h_pad=0.1)
         #############################################################################################
 
-    def reset_crosshair(self, range, azimuth):
+    def __reset_crosshair(self, range, azimuth):
         """
         redraw the cross-hair on the horizontal slice plot
 
@@ -203,7 +203,7 @@ class Tomographyplot(object):
         self.lver.set_xdata(range)
         plt.draw()
 
-    def init_vertical_plot(self):
+    def __init_vertical_plot(self):
         """
         set up the vertical profile plot
 
@@ -219,7 +219,7 @@ class Tomographyplot(object):
         self.ax2.set_title('vertical point profiles', fontsize=12)
         self.ax2.set_ylim(-self.height, self.height)
 
-    def onslide(self, h):
+    def __onslide(self, h):
         """
         a function to respond to slider value changes by redrawing the horizontal slice plot
 
@@ -242,7 +242,7 @@ class Tomographyplot(object):
         cbar.ax.set_ylabel('reflectivity', fontsize=12)  # , rotation=270
         plt.show()
 
-    def onclick(self, event):
+    def __onclick(self, event):
         """
         respond to mouse clicks in the plot.
         This function responds to clicks on the first (horizontal slice) plot and updates the vertical profile and
@@ -262,7 +262,7 @@ class Tomographyplot(object):
             az = int(event.ydata)
 
             # redraw the cross-hair
-            self.reset_crosshair(rg, az)
+            self.__reset_crosshair(rg, az)
 
             # subset the tomography arrays
             subset_vertical = self.capon_bf_abs[az, rg, :]
@@ -271,7 +271,7 @@ class Tomographyplot(object):
 
             # redraw/clear the vertical profile plot in case stacking is disabled
             if not self.checkbox.value:
-                self.init_vertical_plot()
+                self.__init_vertical_plot()
 
             # plot the vertical profile
             label = 'rg: {0:03}; az: {1:03}'.format(rg, az)

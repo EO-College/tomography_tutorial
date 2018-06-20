@@ -1,4 +1,5 @@
 import os
+from osgeo import gdal, osr
 import numpy as np
 import matplotlib.pyplot as plt
 from IPython.display import display
@@ -285,3 +286,62 @@ class Tomographyplot(object):
             # plot the azimuth slice
             self.ax4.imshow(np.rot90(subset_azimuth, 1), origin='lower', cmap='jet', aspect='auto')
             self.ax4.set_title('azimuth slice at range line {}'.format(rg), fontsize=12)
+
+
+class GeoViewer(object):
+    def __init__(self, filename):
+        self.filename = filename
+        ras = gdal.Open(filename)
+        self.rows = ras.RasterYSize
+        self.cols = ras.RasterXSize
+        self.bands = ras.RasterCount
+        geo = ras.GetGeoTransform()
+        srs = osr.SpatialReference(wkt=ras.GetProjection())
+        ras = None
+        srs.AutoIdentifyEPSG()
+        epsg = int(srs.GetAuthorityCode(None))
+
+        xmin = geo[0]
+        ymax = geo[3]
+        xres = geo[1]
+        yres = abs(geo[5])
+
+        xmax = xmin + xres * self.cols
+        ymin = ymax - yres * self.rows
+
+        self.extent = (xmin, xmax, ymin, ymax)
+
+        # define some options for display of the widget box
+        self.layout = Layout(
+            display='flex',
+            flex_flow='row',
+            border='solid 2px',
+            align_items='stretch',
+            width='88%'
+        )
+
+        # define a slider for changing a plotted image
+        self.slider = IntSlider(min=1, max=self.bands, step=1, continuous_update=False,
+                                description='band number',
+                                style={'description_width': 'initial'},
+                                layout=self.layout)
+
+        display(self.slider)
+
+        self.fig = plt.figure()
+        self.ax = plt.gca()
+        self.ax.get_xaxis().get_major_formatter().set_useOffset(False)
+        self.ax.get_yaxis().get_major_formatter().set_useOffset(False)
+
+        # enable interaction with the slider
+        out = interactive_output(self.__onslide, {'h': self.slider})
+
+    def __onslide(self, h):
+        mat = self.__read_band(h)
+        self.ax.imshow(mat, extent=self.extent)
+
+    def __read_band(self, band):
+        ras = gdal.Open(self.filename)
+        mat = ras.GetRasterBand(band).ReadAsArray()
+        ras = None
+        return mat

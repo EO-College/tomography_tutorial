@@ -333,6 +333,8 @@ class GeoViewer(object):
         self.ax.get_xaxis().get_major_formatter().set_useOffset(False)
         self.ax.get_yaxis().get_major_formatter().set_useOffset(False)
 
+        self.ax.format_coord = lambda x, y: 'easting={0:.2f}, northing={1:.2f}, reflectivity='.format(x, y)
+
         # enable interaction with the slider
         out = interactive_output(self.__onslide, {'h': self.slider})
 

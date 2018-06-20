@@ -41,7 +41,7 @@ def normalize(slice):
     Parameters
     ----------
     slice: numpy.ndarray
-        a 1d input array to be normalized
+        the 1d input array to be normalized
 
     Returns
     -------
@@ -105,9 +105,9 @@ def lut_crop(lut_rg, lut_az,
 
     Parameters
     ----------
-    lut_rg: np.ndarray
+    lut_rg: numpy.ndarray
         the lookup table for range direction
-    lut_az: np.ndarray
+    lut_az: numpy.ndarray
         the lookup table for azimuth direction
     ini_range: int
         first range pixel
@@ -129,7 +129,7 @@ def lut_crop(lut_rg, lut_az,
         helper function to get the array slices containing all rows and columns where a binary mask is one/True
         Parameters
         ----------
-        mask: np.ndarray
+        mask: numpy.ndarray
             the mask to be subsetted
 
         Returns
@@ -185,7 +185,7 @@ def geowrite(data, outname, reference, indices, nodata=-99):
 
     Parameters
     ----------
-    data: np.ndarray
+    data: numpy.ndarray
         the array to write to the file; must be either 2D or 3D
     outname: str
         the file name
@@ -256,14 +256,15 @@ def geocode(data, lut_rg_name, lut_az_name, outname=None,
 
     Parameters
     ----------
-    data: np.ndarray
+    data: numpy.ndarray
         the image data in radar coordinates
     lut_rg_name: str
         the name of the range coordinates lookup table
     lut_az_name: str
         the name of the azimuth coordinates lookup table
     outname: str or None
-        the name of the file to write; if None the geocoded array is returned and not file written. See :func:`geowrite`
+        the name of the file to write; if None, the geocoded array is returned and no file is written.
+        See :func:`geowrite`
     range_min: int
         the minimum range coordinate
     range_max: int

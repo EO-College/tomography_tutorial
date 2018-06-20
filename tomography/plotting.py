@@ -17,7 +17,7 @@ class DataViewer(object):
     phase_list: list
         the names of the topographic phase input files
     kz_list: list
-        the names of the Kappa-Zeta topographic phase input files
+        the names of the Kappa-Zeta wave number input files
     slc_stack: numpy.ndarray
         the SLC images
     phase_stack: numpy.ndarray
@@ -99,8 +99,8 @@ class Tomographyplot(object):
     ----------
     capon_bf_abs: numpy.ndarray
         the absolute result of the capon beam forming inversion
-    caponnorm
-        the normalized version of ``capon_bf_abs``; see :func:`~tomography.ancillary.normalize`.
+    caponnorm: numpy.ndarray
+        the normalized version of `capon_bf_abs`; see :func:`~tomography.ancillary.normalize`.
     """
 
     def __init__(self, capon_bf_abs, caponnorm):
@@ -289,6 +289,14 @@ class Tomographyplot(object):
 
 
 class GeoViewer(object):
+    """
+    plotting utility for displaying a geocoded image stack
+
+    Parameters
+    ----------
+    filename: str
+        the name of the file to display
+    """
     def __init__(self, filename):
         self.filename = filename
         ras = gdal.Open(filename)

@@ -15,14 +15,14 @@ def read_data(input, outname, overwrite=False):
     input: str or list
         a single image file name or a list of multiple files
     outname: str
-        the name of the file to be written. Default is False
+        the name of the file to be written.
     overwrite: bool
         overwrite an existing file? Otherwise it is read from file and returned
 
     Returns
     -------
     numpy.ndarray
-        a 2D (one file) or 3D (multiple files) array
+        an array in 2D (one file) or 3D (multiple files)
     """
 
     if overwrite or not os.path.isfile(outname):

@@ -279,18 +279,18 @@ def geocode(data, lut_rg_name, lut_az_name, outname=None,
 
     Examples
     --------
-    >>>from osgeo import gdal
-    >>>from tomography.ancillary import geocode
-    >>>image_name = 'path/to/somedata/image.tif'
-    >>>lut_rg_name = 'path/to/somedata/lut_rg.tif'
-    >>>lut_az_name = 'path/to/somedata/lut_az.tif'
-    >>>outname = 'path/to/somedata/image_sub_geo.tif'
-    >>>image_ras = gdal.Open(image_name)
-    >>>image_mat = image_ras.ReadAsArray()
-    >>>image_ras = None
-    >>>image_mat_sub = image_mat[0:100, 200:400]
-    >>>geocode(image_mat_sub, outname, lut_rg_name, lut_az_name, \
-    range_min=200, range_max=400, azimuth_min=0, azimuth_max=100)
+    >>> from osgeo import gdal
+    >>> from tomography.ancillary import geocode
+    >>> image_name = 'path/to/somedata/image.tif'
+    >>> lut_rg_name = 'path/to/somedata/lut_rg.tif'
+    >>> lut_az_name = 'path/to/somedata/lut_az.tif'
+    >>> outname = 'path/to/somedata/image_sub_geo.tif'
+    >>> image_ras = gdal.Open(image_name)
+    >>> image_mat = image_ras.ReadAsArray()
+    >>> image_ras = None
+    >>> image_mat_sub = image_mat[0:100, 200:400]
+    >>> geocode(image_mat_sub, outname, lut_rg_name, lut_az_name, \
+range_min=200, range_max=400, azimuth_min=0, azimuth_max=100)
     """
     if data.ndim == 2:
         nazimuth, nrange = data.shape

@@ -180,12 +180,13 @@ def lut_crop(lut_rg, lut_az,
 
 def geowrite(data, outname, reference, indices, nodata=-99):
     """
-    write an array to GeoTiff using an already geocoded file as reference
+    write an array to a file using an already geocoded file as reference. The output format is either GeoTiff (for
+    2D arrays) or ENVI for 3D arrays.
 
     Parameters
     ----------
     data: np.ndarray
-        the array to write to the file
+        the array to write to the file; must be either 2D or 3D
     outname: str
         the file name
     reference: gdal.Dataset
@@ -206,35 +207,47 @@ def geowrite(data, outname, reference, indices, nodata=-99):
 
     row_f, row_l = indices[0].start, indices[0].stop
     col_f, col_l = indices[1].start, indices[1].stop
-    ncol = col_l - col_f
-    nrow = row_l - row_f
 
-    if (nrow, ncol) != data.shape:
+    if data.ndim == 2:
+        nrow, ncol = data.shape
+        nbands = 1
+    elif data.ndim == 3:
+        nrow, ncol, nbands = data.shape
+    else:
+        raise RuntimeError("parameter 'data' must be an array with either two or three dimensions")
+
+    if (row_l - row_f, col_l - col_f) != (nrow, ncol):
         raise IndexError('mismatch of data dimensions and subset indices')
 
     geo['xmin'] += col_f * geo['xres']
     geo['ymax'] -= row_f * abs(geo['yres'])
     geotransform = [geo[x] for x in geo_keys]
 
-    driver = gdal.GetDriverByName('GTiff')
-    outDataset = driver.Create(outname, ncol, nrow, 1, GDT_Float32)
+    driver = gdal.GetDriverByName('GTiff' if nbands == 1 else 'ENVI')
+    outDataset = driver.Create(outname, ncol, nrow, nbands, GDT_Float32)
     driver = None
     outDataset.SetMetadata(reference.GetMetadata())
     outDataset.SetGeoTransform(geotransform)
     outDataset.SetProjection(reference.GetProjection())
 
-    outband = outDataset.GetRasterBand(1)
-
-    outband.SetNoDataValue(nodata)
-    outband.WriteArray(data)
-    outband.FlushCache()
+    if nbands == 1:
+        outband = outDataset.GetRasterBand(1)
+        outband.SetNoDataValue(nodata)
+        outband.WriteArray(data)
+        outband.FlushCache()
+    else:
+        for i in range(nbands):
+            outband = outDataset.GetRasterBand(i+1)
+            outband.SetNoDataValue(nodata)
+            outband.WriteArray(data[:, :, i])
+            outband.FlushCache()
 
     ref_data = None
     outband = None
     outDataset = None
 
 
-def geocode(data, outname, lut_rg_name, lut_az_name,
+def geocode(data, lut_rg_name, lut_az_name, outname=None,
             range_min=0, range_max=None, azimuth_min=0, azimuth_max=None):
     """
     Geocode a radar image using lookup tables. The LUTs are expected to be georeferenced and contain range and
@@ -245,12 +258,12 @@ def geocode(data, outname, lut_rg_name, lut_az_name,
     ----------
     data: np.ndarray
         the image data in radar coordinates
-    outname: str
-        the name of the GeoTiff file to write
     lut_rg_name: str
         the name of the range coordinates lookup table
     lut_az_name: str
         the name of the azimuth coordinates lookup table
+    outname: str or None
+        the name of the file to write; if None the geocoded array is returned and not file written. See :func:`geowrite`
     range_min: int
         the minimum range coordinate
     range_max: int
@@ -278,7 +291,13 @@ def geocode(data, outname, lut_rg_name, lut_az_name,
     >>>geocode(image_mat_sub, outname, lut_rg_name, lut_az_name, \
     range_min=200, range_max=400, azimuth_min=0, azimuth_max=100)
     """
-    nazimuth, nrange = data.shape
+    if data.ndim == 2:
+        nazimuth, nrange = data.shape
+        nbands = 1
+    elif data.ndim == 3:
+        nazimuth, nrange, nbands = data.shape
+    else:
+        raise RuntimeError("parameter 'data' must be an array with either two or three dimensions")
 
     if not range_max:
         range_max = nrange
@@ -304,7 +323,7 @@ def geocode(data, outname, lut_rg_name, lut_az_name,
     lut_az_sub = lut_az_sub - azimuth_min
 
     ####################################################################################################################
-    # geocoding option I: very fast but hard to read
+    # actual geocoding
 
     # create a mask containing only radar coordinates of the selected subset
     mask = ((lut_rg_sub < 0) | (lut_rg_sub > nrange)) | ((lut_az_sub < 0) | (lut_az_sub > nazimuth))
@@ -315,29 +334,23 @@ def geocode(data, outname, lut_rg_name, lut_az_name,
     # set all indices out of bounds to zero
     lut_combi[(lut_combi < 0) | ((nrange * nazimuth) < lut_combi)] = 0
 
-    # create the geo-coded array by flattening the radar image to 1D and indexing it by the combined LUT
-    # the resulting array has the same dimensions as the LUT, which is still 2D
-    mat_geo = data.flatten()[lut_combi]
+    if nbands == 2:
+        # create the geo-coded array by flattening the radar image to 1D and indexing it by the combined LUT
+        # the resulting array has the same dimensions as the LUT, which is still 2D
+        mat_geo = data.flatten()[lut_combi]
 
-    # mask out all areas outside the selected subset
-    mat_geo[mask] = np.nan
-    ####################################################################################################################
-    # geocoding option II: the opposite of I but with same result
-
-    # create an output matrix with the same dimensions as the LUT
-    # nrows_geo, ncols_geo = lut_rg_sub.shape
-    # mat_geo = np.zeros((nrows_geo, ncols_geo))
-    # mat_geo[::] = np.nan
-    #
-    # for i in range(nrows_geo):
-    #     for j in range(ncols_geo):
-    #         # get the points in radar coordinates
-    #         pos_range = lut_rg_sub[i, j]
-    #         pos_azimuth = lut_az_sub[i, j]
-    #         # check if it is inside the matrix
-    #         if 0 <= pos_range <= nrange and 0 <= pos_azimuth <= nazimuth:
-    #             mat_geo[i, j] = data[int(pos_azimuth), int(pos_range)]
+        # mask out all areas outside the selected subset
+        mat_geo[mask] = np.nan
+    else:
+        mat_geo = np.empty(lut_combi.shape + (nbands,), data.dtype)
+        for i in range(nbands):
+            sub = data[:, :, i].flatten()[lut_combi]
+            sub[mask] = np.nan
+            mat_geo[:, :, i] = sub
     ####################################################################################################################
     # write the result to disk
-    geowrite(mat_geo, outname, imgfile, indices)
+    if outname:
+        geowrite(mat_geo, outname, imgfile, indices)
     imgfile = None
+    if not outname:
+        return mat_geo

@@ -335,7 +335,7 @@ range_min=200, range_max=400, azimuth_min=0, azimuth_max=100)
     # set all indices out of bounds to zero
     lut_combi[(lut_combi < 0) | ((nrange * nazimuth) < lut_combi)] = 0
 
-    if nbands == 2:
+    if nbands == 1:
         # create the geo-coded array by flattening the radar image to 1D and indexing it by the combined LUT
         # the resulting array has the same dimensions as the LUT, which is still 2D
         mat_geo = data.flatten()[lut_combi]

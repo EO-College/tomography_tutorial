@@ -2,8 +2,7 @@ import os
 import re
 import numpy as np
 
-from osgeo import gdal
-from osgeo.gdalconst import GDT_Float32
+from osgeo import gdal, gdal_array
 
 from scipy.ndimage.measurements import label
 from scipy.ndimage import generate_binary_structure, find_objects
@@ -224,7 +223,8 @@ def geowrite(data, outname, reference, indices, nodata=-99):
     geotransform = [geo[x] for x in geo_keys]
 
     driver = gdal.GetDriverByName('GTiff' if nbands == 1 else 'ENVI')
-    outDataset = driver.Create(outname, ncol, nrow, nbands, GDT_Float32)
+    dtype = gdal_array.NumericTypeCodeToGDALTypeCode(data.dtype)
+    outDataset = driver.Create(outname, ncol, nrow, nbands, dtype)
     driver = None
     outDataset.SetMetadata(reference.GetMetadata())
     outDataset.SetGeoTransform(geotransform)

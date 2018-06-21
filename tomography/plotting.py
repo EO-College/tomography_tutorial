@@ -12,11 +12,11 @@ class DataViewer(object):
 
     Parameters
     ----------
-    slc_list: list
+    slc_list: list of str
         the names of the SLC input files
-    phase_list: list
+    phase_list: list of str
         the names of the topographic phase input files
-    kz_list: list
+    kz_list: list of str
         the names of the Kappa-Zeta wave number input files
     slc_stack: numpy.ndarray
         the SLC images
@@ -100,7 +100,7 @@ class Tomographyplot(object):
     capon_bf_abs: numpy.ndarray
         the absolute result of the capon beam forming inversion
     caponnorm: numpy.ndarray
-        the normalized version of `capon_bf_abs`; see :func:`~tomography.ancillary.normalize`.
+        the normalized version of `capon_bf_abs`; see function :func:`~tomography.ancillary.normalize`.
     """
 
     def __init__(self, capon_bf_abs, caponnorm):
@@ -290,7 +290,8 @@ class Tomographyplot(object):
 
 class GeoViewer(object):
     """
-    plotting utility for displaying a geocoded image stack
+    plotting utility for displaying a geocoded image stack file. On moving the slider, the band at the slider
+    position is read from file and displayed.
 
     Parameters
     ----------

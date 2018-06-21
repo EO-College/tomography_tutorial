@@ -251,20 +251,20 @@ def geocode(data, lut_rg_name, lut_az_name, outname=None,
             range_min=0, range_max=None, azimuth_min=0, azimuth_max=None):
     """
     Geocode a radar image using lookup tables. The LUTs are expected to be georeferenced and contain range and
-    azimuth radar coordinates for a specific image data set which is linked to these LUTs. If parameter data is a
-    subset of this data set, the coordinates of this subset need to be defined.
+    azimuth radar coordinates for a specific image data set which is linked to these LUTs. If parameter `data` is a
+    subset of this data set, the pixel coordinates of this subset need to be defined.
 
     Parameters
     ----------
     data: numpy.ndarray
         the image data in radar coordinates
     lut_rg_name: str
-        the name of the range coordinates lookup table
+        the name of the range coordinates lookup table file
     lut_az_name: str
-        the name of the azimuth coordinates lookup table
+        the name of the azimuth coordinates lookup table file
     outname: str or None
         the name of the file to write; if None, the geocoded array is returned and no file is written.
-        See :func:`geowrite`
+        See function :func:`geowrite` for details on how the file is written.
     range_min: int
         the minimum range coordinate
     range_max: int
@@ -277,8 +277,8 @@ def geocode(data, lut_rg_name, lut_az_name, outname=None,
     Returns
     -------
 
-    Examples
-    --------
+    Example
+    -------
     >>> from osgeo import gdal
     >>> from tomography.ancillary import geocode
     >>> image_name = 'path/to/somedata/image.tif'

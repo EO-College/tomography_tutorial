@@ -21,9 +21,8 @@ Additional general functions for the tomography package.
 plotting
 ========
 
-Plotting utilities for the jupyter notebook.
+Plotting utilities for the Jupyter notebook.
 
 .. automodule:: tomography.plotting
     :members:
     :undoc-members:
-    :show-inheritance:

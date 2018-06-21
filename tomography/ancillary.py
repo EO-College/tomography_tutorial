@@ -97,10 +97,11 @@ def cbfi(slice, nTrack, height):
 
 
 def lut_crop(lut_rg, lut_az,
-             ini_range=0, fin_range=None,
-             ini_azimuth=0, fin_azimuth=None):
+             range_min=0, range_max=None,
+             azimuth_min=0, azimuth_max=None):
     """
-    compute indices for subsetting the range and azimuth lookup tables (LUTs)
+    compute indices for subsetting the range and azimuth lookup tables (LUTs). The returned slices describe the
+    minimum LUT subset, which contains all radar coordinates in the range defined by
 
     Parameters
     ----------
@@ -108,19 +109,19 @@ def lut_crop(lut_rg, lut_az,
         the lookup table for range direction
     lut_az: numpy.ndarray
         the lookup table for azimuth direction
-    ini_range: int
+    range_min: int
         first range pixel
-    fin_range: int
+    range_max: int
         last range pixel
-    ini_azimuth: int
+    azimuth_min: int
         first azimuth pixel
-    fin_azimuth: int
+    azimuth_max: int
         last azimuth pixel
 
     Returns
     -------
     tuple of slices
-        the indices for subsetting: (azmin:azmax, rgmin:rgmax)
+        the indices for subsetting: (ymin:ymax, xmin:xmax)
     """
 
     def get_indices(mask):
@@ -148,10 +149,10 @@ def lut_crop(lut_rg, lut_az,
         return slice(azmin, azmax), slice(rgmin, rgmax)
 
     # create a LUT mask containing all radar coordinates of the defined subset
-    lut_mask = (float(ini_range) <= lut_rg) & \
-               (lut_rg <= float(fin_range)) & \
-               (float(ini_azimuth) <= lut_az) & \
-               (lut_az <= float(fin_azimuth))
+    lut_mask = (float(range_min) <= lut_rg) & \
+               (lut_rg <= float(range_max)) & \
+               (float(azimuth_min) <= lut_az) & \
+               (lut_az <= float(azimuth_max))
 
     # subset the original mask to the computed subset coordinates
     indices = get_indices(lut_mask)

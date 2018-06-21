@@ -31,7 +31,7 @@ version = '0.1'
 release = '0.1'
 
 # -- General configuration ---------------------------------------------------
-MOCK_MODULES = ['osgeo', 'osgeo.gdalconst', 'numpy', 'matplotlib', 'matplotlib.pyplot',
+MOCK_MODULES = ['osgeo', 'numpy', 'matplotlib', 'matplotlib.pyplot',
                 'scipy', 'scipy.ndimage', 'scipy.ndimage.measurements',
                 'IPython', 'IPython.display', 'ipywidgets']
 for mod_name in MOCK_MODULES:

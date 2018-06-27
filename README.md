@@ -2,7 +2,9 @@
  
 # tomography
 
-a tutorial for Synthetic Aperture Radar Tomography
+A tutorial for Synthetic Aperture Radar Tomography  
+
+This tutorial is still in the making as part of the [eo-college](https://eo-college.org/landingpage/) learning initiative. Stay tuned..
 
 ## Installation
 

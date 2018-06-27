@@ -36,8 +36,8 @@ sudo python3 -m pip install git+https://github.com/johntruckenbrodt/tomography.g
 The easiest way to install Python and Jupyter on Windows is via 
 [Anaconda](https://conda.io/docs/user-guide/install/windows.html).  
 Once you have installed Anaconda for Python 3, add its installation directory to 
-the path environment variable.  
-Now we can install GDAL via Anaconda's own installation program:
+the PATH environment variable. See e.g. [here](https://www.computerhope.com/issues/ch000549.htm) for instructions.  
+Now we can install GDAL via Anaconda's own command line installation program:
 ```sh
 conda install -c conda gdal
 ```

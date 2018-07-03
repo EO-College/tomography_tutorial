@@ -41,7 +41,7 @@ class DataViewer(object):
             flex_flow='row',
             border='solid 2px',
             align_items='stretch',
-            width='88%'
+            width='94.5%'
         )
 
         # define a slider for changing a plotted image

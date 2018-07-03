@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from IPython.display import display
 from ipywidgets import IntSlider, Checkbox, Button, Layout, HBox, interactive_output
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 class DataViewer(object):
@@ -45,7 +46,7 @@ class DataViewer(object):
 
         # define a slider for changing a plotted image
         self.slider = IntSlider(min=1, max=len(self.slc_list) - 1, step=1, continuous_update=False,
-                                description='file number',
+                                description='image number',
                                 style={'description_width': 'initial'},
                                 layout=self.layout)
 
@@ -58,6 +59,14 @@ class DataViewer(object):
         self.ax2 = self.fig.add_subplot(132)
         # display of wave number
         self.ax3 = self.fig.add_subplot(133)
+
+        self.ax1.set_xlabel('range', fontsize=12)
+        self.ax1.set_ylabel('azimuth', fontsize=12)
+
+        # format the cursor value displays
+        self.ax1.format_coord = lambda x, y: 'range={0}, azimuth={1}, amplitude='.format(int(x), int(y))
+        self.ax2.format_coord = lambda x, y: 'range={0}, azimuth={1}, phase='.format(int(x), int(y))
+        self.ax3.format_coord = lambda x, y: 'range={0}, azimuth={1}, wave number='.format(int(x), int(y))
 
         # enable interaction with the slider
         out = interactive_output(self.__onslide, {'h': self.slider})
@@ -89,6 +98,20 @@ class DataViewer(object):
         self.ax1.imshow(amp_log, cmap='gray', vmin=p02, vmax=p98)
         self.ax2.imshow(np.absolute(self.phase_stack[:, :, h]))
         self.ax3.imshow(np.absolute(self.kz_stack[:, :, h]))
+        self._set_colorbar(self.ax1, 'amplitude [$dB$]')
+        self._set_colorbar(self.ax2, 'phase [$rad$]')
+        self._set_colorbar(self.ax3, 'wave number [$m\cdot rad^{-1}$]')
+
+    def _set_colorbar(self, axis, label):
+        if len(axis.images) > 1:
+            axis.images[0].colorbar.remove()
+            del axis.images[0]
+
+        divider = make_axes_locatable(axis)
+        cax = divider.append_axes('right', size='5%', pad=0.05)
+
+        cbar = self.fig.colorbar(axis.images[0], cax=cax)
+        cbar.ax.set_ylabel(label, fontsize=12)
 
 
 class Tomographyplot(object):
@@ -240,7 +263,7 @@ class Tomographyplot(object):
             self.ax1.images[0].colorbar.remove()
             del self.ax1.images[0]
         cbar = self.fig.colorbar(p1, ax=self.ax1)
-        cbar.ax.set_ylabel('reflectivity', fontsize=12)  # , rotation=270
+        cbar.ax.set_ylabel('reflectivity', fontsize=12)
         plt.show()
 
     def __onclick(self, event):

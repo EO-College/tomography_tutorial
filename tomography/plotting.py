@@ -313,8 +313,9 @@ class Tomographyplot(object):
 
 class GeoViewer(object):
     """
-    plotting utility for displaying a geocoded image stack file. On moving the slider, the band at the slider
-    position is read from file and displayed.
+    plotting utility for displaying a geocoded image stack file.
+
+    On moving the slider, the band at the slider position is read from file and displayed.
 
     Parameters
     ----------

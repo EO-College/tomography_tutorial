@@ -361,9 +361,12 @@ class GeoViewer(object):
     ----------
     filename: str
         the name of the file to display
+    cmap: str
+        the color map for displaying the image.
+        See `matplotlib.pyplot.imshow <https://matplotlib.org/api/_as_gen/matplotlib.pyplot.imshow.html>`_
     """
 
-    def __init__(self, filename):
+    def __init__(self, filename, cmap='jet'):
         self.filename = filename
         ras = gdal.Open(filename)
         self.rows = ras.RasterYSize
@@ -394,6 +397,8 @@ class GeoViewer(object):
             width='88%'
         )
 
+        self.colormap = cmap
+
         # define a slider for changing a plotted image
         self.slider = IntSlider(min=1, max=self.bands, step=1, continuous_update=False,
                                 description='band number',
@@ -414,7 +419,7 @@ class GeoViewer(object):
 
     def __onslide(self, h):
         mat = self.__read_band(h)
-        self.ax.imshow(mat, extent=self.extent)
+        self.ax.imshow(mat, extent=self.extent, cmap=self.colormap)
 
     def __read_band(self, band):
         ras = gdal.Open(self.filename)

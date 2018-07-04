@@ -3,7 +3,7 @@ from osgeo import gdal, osr
 import numpy as np
 import matplotlib.pyplot as plt
 from IPython.display import display
-from ipywidgets import IntSlider, Checkbox, Button, Layout, HBox, interactive_output
+from ipywidgets import IntSlider, IntRangeSlider, Checkbox, Button, Layout, HBox, VBox, interactive_output
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
@@ -26,6 +26,7 @@ class DataViewer(object):
     kz_stack: numpy.ndarray
         the wave number images
     """
+
     def __init__(self, slc_list, phase_list, kz_list, slc_stack, phase_stack, kz_stack):
         self.slc_list = slc_list
         self.phase_list = phase_list
@@ -139,26 +140,35 @@ class Tomographyplot(object):
         # define a slider for changing the horizontal slice image
         self.slider = IntSlider(min=-self.height, max=self.height, step=10, continuous_update=False,
                                 description='inversion height',
-                                style={'description_width': 'initial'})
+                                style={'description_width': '140px'},
+                                layout={'width': '400px'})
+
+        self.rangeslider = IntRangeSlider(value=[-self.height, self.height], step=1,
+                                          min=-self.height, max=self.height,
+                                          continuous_update=False, description='inversion height range',
+                                          style={'description_width': '140px'},
+                                          layout={'width': '400px'})
+
+        # an internal variable to keep track of the set inversion height range
+        self.heightrange = (-self.height, self.height)
 
         # a simple checkbox to enable/disable stacking of vertical profiles into one plot
-        self.checkbox = Checkbox(value=True, description='stack vertical profiles')
+        self.checkbox = Checkbox(value=True, description='stack vertical profiles', indent=False)
 
         # a button to clear the vertical profile plot
         self.clearbutton = Button(description='clear vertical plot')
         self.clearbutton.on_click(lambda x: self.__init_vertical_plot())
 
-        # define some options for display of the widget box
         layout = Layout(
-            display='flex',
-            flex_flow='row',
+            justify_content='space-around',
             border='solid 2px',
-            align_items='stretch',
             width='88%'
         )
 
-        # display the widget box
-        form = HBox([self.slider, self.checkbox, self.clearbutton], layout=layout)
+        form = HBox(children=[VBox([self.slider, self.rangeslider]),
+                              VBox([self.checkbox, self.clearbutton])],
+                    layout=layout)
+
         display(form)
         #############################################################################################
         # main plot setup
@@ -178,11 +188,8 @@ class Tomographyplot(object):
         # set up the plots for range and azimuth slices
         self.ax3.set_xlim(0, capon_bf_abs.shape[1])
         self.ax4.set_xlim(0, capon_bf_abs.shape[0])
-
-        # set up the y-axis ticks and labeling for the azimuth and range slice plots
-        ytick_lab = [-self.height, -self.height // 2, 0, self.height // 2, self.height]
-        ytick_pos = [0, self.height / 2, self.height, self.height + self.height / 2, self.height * 2]
-        plt.setp([self.ax3, self.ax4], yticklabels=ytick_lab, yticks=ytick_pos)
+        self.ax3.set_ylim(0, self.height * 2)
+        self.ax4.set_ylim(0, self.height * 2)
 
         # set up the vertical profile plot
         self.__init_vertical_plot()
@@ -194,8 +201,9 @@ class Tomographyplot(object):
         # make the figure respond to mouse clicks by executing method __onclick
         self.cid1 = self.fig.canvas.mpl_connect('button_press_event', self.__onclick)
 
-        # enable interaction with the slider
-        out = interactive_output(self.__onslide, {'h': self.slider})
+        # enable interaction with the sliders
+        out1 = interactive_output(self.__onslide, {'h': self.slider})
+        out2 = interactive_output(self.__onslide_range, {'h': self.rangeslider})
         #############################################################################################
         # general formatting
 
@@ -241,7 +249,20 @@ class Tomographyplot(object):
         self.ax2.set_ylabel('height [m]', fontsize=12)
         self.ax2.set_xlabel('reflectivity', fontsize=12)
         self.ax2.set_title('vertical point profiles', fontsize=12)
-        self.ax2.set_ylim(-self.height, self.height)
+        self.ax2.set_ylim(self.heightrange[0], self.heightrange[1])
+
+    def __rename_sliceplot_ticklabels(self):
+        """
+        rename the ticks of the slice plots from pixel coordinates (0:nbands) to inversion height range (-height:height)
+
+        Returns
+        -------
+
+        """
+        ticks = self.ax3.get_yticks()
+        labels_new = [str(int(x - self.height)) for x in ticks]
+        self.ax3.set_yticklabels(labels_new)
+        self.ax4.set_yticklabels(labels_new)
 
     def __onslide(self, h):
         """
@@ -266,6 +287,24 @@ class Tomographyplot(object):
         cbar.ax.set_ylabel('reflectivity', fontsize=12)
         plt.show()
 
+    def __onslide_range(self, h):
+        """
+        respond to changes on the range slider. This changes the displayed y-axis range of the vertical profile and
+        slice plots and renames the tick labels of the
+        Parameters
+        ----------
+        h
+
+        Returns
+        -------
+
+        """
+        self.heightrange = h
+        self.ax2.set_ylim(self.heightrange[0], self.heightrange[1])
+        self.ax3.set_ylim(self.heightrange[0] + self.height, self.heightrange[1] + self.height)
+        self.ax4.set_ylim(self.heightrange[0] + self.height, self.heightrange[1] + self.height)
+        self.__rename_sliceplot_ticklabels()
+
     def __onclick(self, event):
         """
         respond to mouse clicks in the plot.
@@ -288,7 +327,6 @@ class Tomographyplot(object):
             # redraw the cross-hair
             self.__reset_crosshair(rg, az)
 
-            # subset the tomography arrays
             subset_vertical = self.capon_bf_abs[az, rg, :]
             subset_range = self.caponnorm[az, :, :]
             subset_azimuth = self.caponnorm[:, rg, :]
@@ -310,6 +348,8 @@ class Tomographyplot(object):
             self.ax4.imshow(np.rot90(subset_azimuth, 1), origin='lower', cmap='jet', aspect='auto')
             self.ax4.set_title('azimuth slice at range line {}'.format(rg), fontsize=12)
 
+            self.__rename_sliceplot_ticklabels()
+
 
 class GeoViewer(object):
     """
@@ -322,6 +362,7 @@ class GeoViewer(object):
     filename: str
         the name of the file to display
     """
+
     def __init__(self, filename):
         self.filename = filename
         ras = gdal.Open(filename)

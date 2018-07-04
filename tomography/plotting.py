@@ -364,9 +364,13 @@ class GeoViewer(object):
     cmap: str
         the color map for displaying the image.
         See `matplotlib.pyplot.imshow <https://matplotlib.org/api/_as_gen/matplotlib.pyplot.imshow.html>`_
+    band_indices: list
+        a list of indices for renaming the individual bands in `filename` such that one can scroll trough the
+        range of inversion heights, e.g. -70:70, instead of the raw band indices, e.g. 1:140.
+        The number of unique elements must of same length as the number of bands in `filename`.
     """
 
-    def __init__(self, filename, cmap='jet'):
+    def __init__(self, filename, cmap='jet', band_indices=None):
         self.filename = filename
         ras = gdal.Open(filename)
         self.rows = ras.RasterYSize
@@ -399,9 +403,19 @@ class GeoViewer(object):
 
         self.colormap = cmap
 
+        if band_indices is not None:
+            if len(list(set(band_indices))) != self.bands:
+                raise RuntimeError('length mismatch of unique provided band indices ({0}) '
+                                   'and image bands ({1})'.format(len(band_indices), self.bands))
+            else:
+                self.indices = sorted(band_indices)
+        else:
+            self.indices = range(1, self.bands + 1)
+
         # define a slider for changing a plotted image
-        self.slider = IntSlider(min=1, max=self.bands, step=1, continuous_update=False,
-                                description='band number',
+        self.slider = IntSlider(min=min(self.indices), max=max(self.indices), step=1, continuous_update=False,
+                                value=self.indices[len(self.indices)//2],
+                                description='band index',
                                 style={'description_width': 'initial'},
                                 layout=self.layout)
 
@@ -418,7 +432,7 @@ class GeoViewer(object):
         out = interactive_output(self.__onslide, {'h': self.slider})
 
     def __onslide(self, h):
-        mat = self.__read_band(h)
+        mat = self.__read_band(self.indices.index(h) + 1)
         self.ax.imshow(mat, extent=self.extent, cmap=self.colormap)
 
     def __read_band(self, band):

@@ -355,7 +355,7 @@ class GeoViewer(object):
     """
     plotting utility for displaying a geocoded image stack file.
 
-    On moving the slider, the band at the slider position is read from file and displayed.
+    On moving the slider, the band at the slider position is read from the file and displayed.
 
     Parameters
     ----------

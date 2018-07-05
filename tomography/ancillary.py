@@ -181,7 +181,7 @@ def lut_crop(lut_rg, lut_az,
 def geowrite(data, outname, reference, indices, nodata=-99):
     """
     write an array to a file using an already geocoded file as reference. The output format is either GeoTiff (for
-    2D arrays) or ENVI for 3D arrays.
+    2D arrays) or ENVI (for 3D arrays).
 
     Parameters
     ----------

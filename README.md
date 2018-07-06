@@ -46,5 +46,5 @@ conda install -c conda gdal
 
 Finally we can install the tutorial package:
 ```sh
-pip install git+https://github.com/johntruckenbrodt/tomography.git
+pip install git+https://github.com/SAR-EDU/tomography.git
 ```

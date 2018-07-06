@@ -6,19 +6,10 @@
 Welcome to the documentation of the tomography tutorial!
 ========================================================
 
-Contents:
-
-This is the documentation of tomography.
+Content:
 
 .. toctree::
 
    tomography
 
-
-
-Indices and tables
-==================
-
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

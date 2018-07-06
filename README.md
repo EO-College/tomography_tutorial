@@ -5,7 +5,7 @@
 A tutorial for Synthetic Aperture Radar Tomography  
 
 This tutorial is still in the making as part of the 
-<a href="https://eo-college.org/landingpage/" target="_blank" rel="noopener noreferrer">EO College</a> learning initiative.  
+[EO College](https://eo-college.org/landingpage/) learning initiative.  
 Please stay tuned..
 ## Installation
 
@@ -39,13 +39,11 @@ sudo python3 -m pip install git+https://github.com/SAR-EDU/tomography.git
 #### Windows
 
 The easiest way to install Python and Jupyter on Windows is via 
-<a href="https://conda.io/docs/user-guide/install/windows.html" target="_blank" rel="noopener noreferrer">Anaconda</a>. 
+[Anaconda](https://conda.io/docs/user-guide/install/windows.html). 
 Please make sure to install the Python 3 version.  
-Once you have installed it, add its installation directory to 
-the PATH environment variable. See e.g. 
-<a href="https://www.computerhope.com/issues/ch000549.htm" target="_blank" rel="noopener noreferrer">here</a> for instructions.
-We further need the versioning system git, which can be downloaded from 
-<a href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer">here</a>.  
+Once you have installed it, add its installation directory to the PATH environment variable. 
+See e.g. [here](https://www.computerhope.com/issues/ch000549.htm) for instructions.
+We further need the versioning system git, which can be downloaded from [here](https://git-scm.com/downloads).  
 Now we can install GDAL via Anaconda's own command line installation program:
 ```sh
 conda install -c conda gdal

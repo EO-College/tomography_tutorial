@@ -25,7 +25,7 @@ def start(directory):
     notebook_name = 'tutorial.ipynb'
     if not os.path.isdir(directory):
         os.makedirs(directory)
-    target = os.path.join(directory, )
+    target = os.path.join(directory, notebook_name)
     if not os.path.isfile(target):
         source = os.path.join(os.path.dirname(os.path.realpath(__file__)), notebook_name)
         # copy the tutorial notebook from the directory of the installed package to the user directory

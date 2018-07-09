@@ -61,7 +61,8 @@ start('your/custom/notebook.ipynb')
 ```
 This will create a custom copy of the notebook if it does not exist and start it in the browser.
 If the directory in which the custom notebook is to be stored does not yet exist, it is created 
-automatically.  
+automatically. Please mind that under Windows paths need to be separated with `\\` or `/`.  
+A single backslash will cause an error.
 You now have a custom version of the tutorial, which you can modify as you like.
 If you want to restore the original notebook, which was delivered with the Python package, just delete 
 your custom version and run function `start` again.

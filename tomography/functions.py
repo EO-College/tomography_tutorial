@@ -1,9 +1,36 @@
 import os
 import pickle
+import shutil
 import numpy as np
 from osgeo import gdal
 from scipy import ndimage
+import subprocess as sp
 from .ancillary import cbfi
+
+
+def start(directory):
+    """
+    Create a custom copy of the notebook in a directory defined buy the user and start it.
+    The notebook is only copied from the package if it does not yet exist in the user directory.
+
+    Parameters
+    ----------
+    directory: str
+        a folder to place the notebook in
+
+    Returns
+    -------
+
+    """
+    notebook_name = 'tutorial.ipynb'
+    if not os.path.isdir(directory):
+        os.makedirs(directory)
+    target = os.path.join(directory, )
+    if not os.path.isfile(target):
+        source = os.path.join(os.path.dirname(os.path.realpath(__file__)), notebook_name)
+        # copy the tutorial notebook from the directory of the installed package to the user directory
+        shutil.copyfile(source, target)
+    sp.check_call(['jupyter', 'notebook', notebook_name], cwd=directory)
 
 
 def read_data(input, outname, overwrite=False):

@@ -9,14 +9,14 @@ This tutorial is still in the making as part of the
 Please stay tuned..
 ## Installation
 
-The following subsections descripbe the installation process for different operating systems.
+The following subsections describe the installation process for different operating systems.
 Please mind that this tutorial depends on Python 3.
 
 #### Ubuntu
 
 First we want to install GDAL to read our data. For this we add the ubuntugis package 
-repository so we can install a more recent version than that supplied by Ubuntu.  
-After this we install GDAL together with its Python bindings.
+repository so we can install a more recent version than that supplied by Ubuntu.
+After this we install GDAL together with its Python bindings:
 ```sh
 sudo add-apt-repository ppa:ubuntugis/ppa
 sudo apt-get update
@@ -25,8 +25,7 @@ sudo apt-get install gdal-bin python3-gdal
 
 Next we install Tkinter for graphical support and git for package version control:
 ```sh
-sudo apt-get install python3-tk
-sudo apt-get install git
+sudo apt-get install python3-tk git
 ```
 
 As a last step we install the tomography module including its direct Python package 
@@ -41,15 +40,28 @@ sudo python3 -m pip install git+https://github.com/SAR-EDU/tomography.git
 The easiest way to install Python and Jupyter on Windows is via 
 [Anaconda](https://conda.io/docs/user-guide/install/windows.html). 
 Please make sure to install the Python 3 version.  
-Once you have installed it, add its installation directory to the PATH environment variable. 
+Once you have installed it, please add its installation directory to the PATH environment variable. 
 See e.g. [here](https://www.computerhope.com/issues/ch000549.htm) for instructions.
-We further need the versioning system git, which can be downloaded from [here](https://git-scm.com/downloads).  
-Now we can install GDAL via Anaconda's own command line installation program:
+Now we can install GDAL and git via Anaconda's own command line installation program:
 ```sh
-conda install -c conda gdal
+conda install -c conda gdal git
 ```
 
 Finally we can install the tutorial package:
 ```sh
 pip install git+https://github.com/SAR-EDU/tomography.git
 ```
+## Starting the notebook
+
+Now that everything is installed you can start the notebook via the tutorial Python module.
+In the command prompt, start Python and execute the function `start`:
+```Python
+from tomography import start
+start('your/custom/directory')
+```
+This will create the defined directory if it does not yet exist, 
+copy the tutorial from the installed package into this directory if it is not yet in there and
+start the tutorial in the browser.  
+You now have a custom version of the tutorial, which you can modify as you like and save the results.
+If you want to restore the original notebook, which was delivered with the Python package, just delete your 
+custom version from the directory and run function `start` again.

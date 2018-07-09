@@ -57,11 +57,11 @@ Now that everything is installed you can start the notebook via the tutorial Pyt
 In the command prompt, start Python and execute the function `start`:
 ```Python
 from tomography import start
-start('your/custom/directory')
+start('your/custom/notebook.ipynb')
 ```
-This will create the defined directory if it does not yet exist, 
-copy the tutorial from the installed package into this directory if it is not yet in there and
-start the tutorial in the browser.  
-You now have a custom version of the tutorial, which you can modify as you like and save the results.
-If you want to restore the original notebook, which was delivered with the Python package, just delete your 
-custom version from the directory and run function `start` again.
+This will create a custom copy of the notebook if it does not exist and start it in the browser.
+If the directory in which the custom notebook is to be stored does not yet exist, it is created 
+automatically.  
+You now have a custom version of the tutorial, which you can modify as you like.
+If you want to restore the original notebook, which was delivered with the Python package, just delete 
+your custom version and run function `start` again.

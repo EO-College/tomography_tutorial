@@ -8,29 +8,33 @@ import subprocess as sp
 from .ancillary import cbfi
 
 
-def start(directory):
+def start(notebook):
     """
-    Create a custom copy of the notebook in a directory defined buy the user and start it.
-    The notebook is only copied from the package if it does not yet exist in the user directory.
+    Create a custom copy of the jupyter notebook with a name defined buy the user and start it.
+    The notebook is only copied from the package if it does not yet exist.
+    Jupyter notebook files have the extension '.ipynb'. If the defined notebook does not contain this extension it is
+    appended automatically.
 
     Parameters
     ----------
     directory: str
-        a folder to place the notebook in
+        the name of the custom notebook
 
     Returns
     -------
 
     """
-    notebook_name = 'tutorial.ipynb'
-    if not os.path.isdir(directory):
-        os.makedirs(directory)
-    target = os.path.join(directory, notebook_name)
-    if not os.path.isfile(target):
-        source = os.path.join(os.path.dirname(os.path.realpath(__file__)), notebook_name)
+    source_basename = 'tutorial.ipynb'
+    target_dir = os.path.dirname(notebook)
+    if not os.path.isdir(target_dir):
+        os.makedirs(target_dir)
+    if not notebook.endswith('ipynb'):
+        notebook += 'ipynb'
+    if not os.path.isfile(notebook):
+        source = os.path.join(os.path.dirname(os.path.realpath(__file__)), source_basename)
         # copy the tutorial notebook from the directory of the installed package to the user directory
-        shutil.copyfile(source, target)
-    sp.check_call(['jupyter', 'notebook', notebook_name], cwd=directory)
+        shutil.copyfile(source, notebook)
+    sp.check_call(['jupyter', 'notebook', notebook], cwd=target_dir)
 
 
 def read_data(input, outname, overwrite=False):

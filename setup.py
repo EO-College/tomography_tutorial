@@ -1,12 +1,4 @@
 from setuptools import setup, find_packages
-import os
-import shutil
-
-# Create .tomography in HOME - Directory
-directory = os.path.join(os.path.expanduser('~'), '.tomography')
-
-if not os.path.exists(directory):
-    os.makedirs(directory)
 
 
 setup(name='tomography',
@@ -27,6 +19,3 @@ setup(name='tomography',
       author_email='john.truckenbrodt@uni-jena.de',
       license='MIT',
       zip_safe=False)
-
-# copy the tutorial notebook from the directory of the installed package to .tomography
-shutil.copyfile('./tomography/tutorial.ipynb', os.path.join(directory, 'tutorial.ipynb'))

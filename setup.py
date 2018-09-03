@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 
-setup(name='tomography-tutorial',
+setup(name='tomography_tutorial',
       packages=find_packages(),
       include_package_data=True,
       version='0.1',
@@ -14,7 +14,7 @@ setup(name='tomography-tutorial',
                         'jupyter',
                         'matplotlib',
                         'scipy'],
-      url='https://github.com/EO-College/tomography-tutorial',
+      url='https://github.com/EO-College/tomography_tutorial',
       author='John Truckenbrodt',
       author_email='john.truckenbrodt@uni-jena.de',
       license='MIT',

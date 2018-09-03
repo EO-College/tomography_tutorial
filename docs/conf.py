@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('..') + os.sep)
 
 # -- Project information -----------------------------------------------------
 
-project = 'tomography-tutorial'
+project = 'tomography_tutorial'
 copyright = '2018, Nesrin Salepci, John Truckenbrodt'
 author = 'Nesrin Salepci, John Truckenbrodt'
 
@@ -126,7 +126,7 @@ html_use_index = True
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'tomographytutorialdoc'
+htmlhelp_basename = '{}doc'.format(project)
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -153,7 +153,9 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'tomography-tutorial.tex', u'tomography tutorial Documentation',
+    (master_doc,
+     '{}.tex'.format(project),
+     u'{} Documentation'.format(project),
      author, 'manual'),
 ]
 
@@ -163,7 +165,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'tomography-tutorial', u'tomography tutorial Documentation',
+    (master_doc, project, u'{} Documentation'.format(project),
      [author], 1)
 ]
 
@@ -174,8 +176,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'tomography-tutorial', u'tomography tutorial Documentation',
-     author, 'tomography-tutorial', 'One line description of project.',
+    (master_doc, project, u'{} Documentation'.format(project),
+     author, project, 'One line description of project.',
      'Miscellaneous'),
 ]
 

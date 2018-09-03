@@ -56,7 +56,7 @@ pip install git+https://github.com/SAR-EDU/tomography.git
 Now that everything is installed you can start the notebook via the tutorial Python module.
 In the command prompt, start Python and execute the function `start`:
 ```Python
-from tomography import start
+from tomography_tutorial import start
 start('/your/custom/notebook.ipynb')
 ```
 This will create a custom copy of the notebook if it does not exist and start it in the browser.

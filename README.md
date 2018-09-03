@@ -25,9 +25,9 @@ sudo apt-get update
 sudo apt-get install gdal-bin python3-gdal
 ```
 
-Next we install Tkinter for graphical support and git for package version control:
+Next we install Tkinter for graphical support:
 ```sh
-sudo apt-get install python3-tk git
+sudo apt-get install python3-tk
 ```
 
 As a last step we install the tomography module including its direct Python package 
@@ -44,9 +44,9 @@ The easiest way to install Python and Jupyter on Windows is via
 Please make sure to install the Python 3 version.  
 Once you have installed it, please add its installation directory to the PATH environment variable. 
 See e.g. [here](https://www.computerhope.com/issues/ch000549.htm) for instructions.
-Now we can install GDAL and git via Anaconda's own command line installation program:
+Now we can install GDAL via Anaconda's own command line installation program:
 ```sh
-conda install -c conda gdal git
+conda install -c conda gdal
 ```
 
 Finally we can install the tutorial package:
@@ -71,11 +71,11 @@ If the directory in which the custom notebook is to be stored does not yet exist
 automatically. Please mind that under Windows paths need to be separated with `\\` or `/`, 
 a single backslash will cause an error.  
 You now have a custom version of the tutorial, 
-which you can modify as you like and restart via function `start`.  
+which you can modify as you like and restart later via function `start`.  
 If you want to restore the original notebook, which was delivered with the Python package, just delete 
 your custom version and run function `start` again.  
 
 ## API documentation
 
-The documentation of the package functions which are used in the notebook can be found 
+The documentation of the package functionality which is used in the notebook can be found 
 [here](https://eocollege-tomography.readthedocs.io/en/latest/index.html).

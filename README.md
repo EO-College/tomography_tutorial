@@ -1,12 +1,14 @@
 [![Documentation Status](https://readthedocs.org/projects/eocollege-tomography/badge/?version=latest)](http://eocollege-tomography.readthedocs.io/en/latest/?badge=latest)
  
-# tomography_tutorial
+# EO-College tomography tutorial
 
-A tutorial for Synthetic Aperture Radar Tomography  
+This tutorial, developed by the [EO College](https://eo-college.org/landingpage/) learning initiative,
+ explores Synthetic Aperture Radar (SAR) tomography 
+with data from DLR's [F-SAR](https://www.dlr.de/hr/en/desktopdefault.aspx/tabid-2326/3776_read-5691) system.
+It consists of a Python package, containing several functions for processing and displaying the data,
+as well as a Jupyter notebook.  
+Please follow the steps below to get started.
 
-This tutorial is still in the making as part of the 
-[EO College](https://eo-college.org/landingpage/) learning initiative.  
-Please stay tuned..
 ## Installation
 
 The following subsections describe the installation process for different operating systems.
@@ -32,7 +34,7 @@ As a last step we install the tomography module including its direct Python pack
 dependencies:
 
 ```sh
-sudo python3 -m pip install git+https://github.com/EO-College/tomography_tutorial.git
+sudo python3 -m pip install tomography_tutorial
 ```
 
 #### Windows
@@ -49,8 +51,13 @@ conda install -c conda gdal git
 
 Finally we can install the tutorial package:
 ```sh
-pip install git+https://github.com/EO-College/tomography_tutorial.git
+python -m pip install tomography_tutorial
 ```
+
+## download of tutorial test data
+Prior to starting the tutorial you need to download and unpack the data found 
+[here](https://eo-college.org/Data/Tomography/tomography_data.zip).
+
 ## Starting the notebook
 
 Now that everything is installed you can start the notebook via the tutorial Python module.
@@ -59,11 +66,16 @@ In the command prompt, start Python and execute the function `start`:
 from tomography_tutorial import start
 start('/your/custom/notebook.ipynb')
 ```
-This will create a custom copy of the notebook if it does not exist and start it in the browser.
+This will create a custom copy of the notebook if it does not yet exist and start it in the browser.
 If the directory in which the custom notebook is to be stored does not yet exist, it is created 
-automatically. Please mind that under Windows paths need to be separated with `\\` or `/`.  
-A single backslash will cause an error.  
+automatically. Please mind that under Windows paths need to be separated with `\\` or `/`, 
+a single backslash will cause an error.  
 You now have a custom version of the tutorial, 
 which you can modify as you like and restart via function `start`.  
 If you want to restore the original notebook, which was delivered with the Python package, just delete 
-your custom version and run function `start` again.
+your custom version and run function `start` again.  
+
+## API documentation
+
+The documentation of the package functions which are used in the notebook can be found 
+[here](https://eocollege-tomography.readthedocs.io/en/latest/index.html).

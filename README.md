@@ -1,6 +1,6 @@
 [![Documentation Status](https://readthedocs.org/projects/eocollege-tomography/badge/?version=latest)](http://eocollege-tomography.readthedocs.io/en/latest/?badge=latest)
  
-# tomography
+# tomography-tutorial
 
 A tutorial for Synthetic Aperture Radar Tomography  
 
@@ -57,12 +57,13 @@ Now that everything is installed you can start the notebook via the tutorial Pyt
 In the command prompt, start Python and execute the function `start`:
 ```Python
 from tomography import start
-start('your/custom/notebook.ipynb')
+start('/your/custom/notebook.ipynb')
 ```
 This will create a custom copy of the notebook if it does not exist and start it in the browser.
 If the directory in which the custom notebook is to be stored does not yet exist, it is created 
 automatically. Please mind that under Windows paths need to be separated with `\\` or `/`.  
-A single backslash will cause an error.
-You now have a custom version of the tutorial, which you can modify as you like.
+A single backslash will cause an error.  
+You now have a custom version of the tutorial, 
+which you can modify as you like and restart via function `start`.  
 If you want to restore the original notebook, which was delivered with the Python package, just delete 
 your custom version and run function `start` again.

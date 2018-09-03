@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 
-setup(name='tomographytutorial',
+setup(name='tomography-tutorial',
       packages=find_packages(),
       include_package_data=True,
       version='0.1',
@@ -14,7 +14,7 @@ setup(name='tomographytutorial',
                         'jupyter',
                         'matplotlib',
                         'scipy'],
-      url='https://github.com/SAR-EDU/tomography.git',
+      url='https://github.com/EO-College/tomography',
       author='John Truckenbrodt',
       author_email='john.truckenbrodt@uni-jena.de',
       license='MIT',

@@ -124,7 +124,7 @@ class Tomographyplot(object):
     capon_bf_abs: numpy.ndarray
         the absolute result of the capon beam forming inversion
     caponnorm: numpy.ndarray
-        the normalized version of `capon_bf_abs`; see function :func:`~tomography.ancillary.normalize`.
+        the normalized version of `capon_bf_abs`; see function :func:`~tomography-tutorial.ancillary.normalize`.
     """
 
     def __init__(self, capon_bf_abs, caponnorm):

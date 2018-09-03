@@ -55,7 +55,8 @@ def normalize(slice):
 def cbfi(slice, nTrack, height):
     """
     computation of capon beam forming inversion for a single pixel.
-    This function is used internally by the core function :func:`~tomography.functions.capon_beam_forming_inversion`.
+    This function is used internally by the core function
+    :func:`~tomography-tutorial.functions.capon_beam_forming_inversion`.
 
     Parameters
     ----------
@@ -281,7 +282,7 @@ def geocode(data, lut_rg_name, lut_az_name, outname=None,
     Example
     -------
     >>> from osgeo import gdal
-    >>> from tomography.ancillary import geocode
+    >>> from tomography-tutorial.ancillary import geocode
     >>> image_name = 'path/to/somedata/image.tif'
     >>> lut_rg_name = 'path/to/somedata/lut_rg.tif'
     >>> lut_az_name = 'path/to/somedata/lut_az.tif'

@@ -1,6 +1,6 @@
 [![Documentation Status](https://readthedocs.org/projects/eocollege-tomography/badge/?version=latest)](http://eocollege-tomography.readthedocs.io/en/latest/?badge=latest)
  
-# tomography-tutorial
+# tomography_tutorial
 
 A tutorial for Synthetic Aperture Radar Tomography  
 
@@ -32,7 +32,7 @@ As a last step we install the tomography module including its direct Python pack
 dependencies:
 
 ```sh
-sudo python3 -m pip install git+https://github.com/SAR-EDU/tomography.git
+sudo python3 -m pip install git+https://github.com/SAR-EDU/tomography_tutorial.git
 ```
 
 #### Windows
@@ -49,7 +49,7 @@ conda install -c conda gdal git
 
 Finally we can install the tutorial package:
 ```sh
-pip install git+https://github.com/SAR-EDU/tomography.git
+pip install git+https://github.com/SAR-EDU/tomography_tutorial.git
 ```
 ## Starting the notebook
 

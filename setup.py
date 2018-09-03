@@ -1,5 +1,6 @@
 from setuptools import setup, find_packages
 
+
 setup(name='tomography',
       packages=find_packages(),
       include_package_data=True,
@@ -13,7 +14,7 @@ setup(name='tomography',
                         'jupyter',
                         'matplotlib',
                         'scipy'],
-      url='https://github.com/johntruckenbrodt/tomography.git',
+      url='https://github.com/SAR-EDU/tomography.git',
       author='John Truckenbrodt',
       author_email='john.truckenbrodt@uni-jena.de',
       license='MIT',

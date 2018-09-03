@@ -1,9 +1,40 @@
 import os
 import pickle
+import shutil
 import numpy as np
 from osgeo import gdal
 from scipy import ndimage
+import subprocess as sp
 from .ancillary import cbfi
+
+
+def start(notebook):
+    """
+    Create a custom copy of the jupyter notebook with a name defined buy the user and start it.
+    The notebook is only copied from the package if it does not yet exist.
+    Jupyter notebook files have the extension '.ipynb'. If the defined notebook does not contain this extension it is
+    appended automatically.
+
+    Parameters
+    ----------
+    directory: str
+        the name of the custom notebook
+
+    Returns
+    -------
+
+    """
+    source_basename = 'tutorial.ipynb'
+    target_dir = os.path.dirname(notebook)
+    if not os.path.isdir(target_dir):
+        os.makedirs(target_dir)
+    if not notebook.endswith('ipynb'):
+        notebook += 'ipynb'
+    if not os.path.isfile(notebook):
+        source = os.path.join(os.path.dirname(os.path.realpath(__file__)), source_basename)
+        # copy the tutorial notebook from the directory of the installed package to the user directory
+        shutil.copyfile(source, notebook)
+    sp.check_call(['jupyter', 'notebook', notebook], cwd=target_dir)
 
 
 def read_data(input, outname, overwrite=False):

@@ -1,5 +1,14 @@
+import os
+import sys
 from setuptools import setup, find_packages
 
+directory = os.path.abspath(os.path.dirname(__file__))
+if sys.version_info >= (3, 0):
+    with open(os.path.join(directory, 'README.md'), encoding='utf-8') as f:
+        long_description = f.read()
+else:
+    with open(os.path.join(directory, 'README.md')) as f:
+        long_description = f.read()
 
 setup(name='tomography_tutorial',
       packages=find_packages(),
@@ -18,4 +27,6 @@ setup(name='tomography_tutorial',
       author='John Truckenbrodt',
       author_email='john.truckenbrodt@uni-jena.de',
       license='MIT',
-      zip_safe=False)
+      zip_safe=False,
+      long_description=long_description,
+      long_description_content_type='text/markdown')

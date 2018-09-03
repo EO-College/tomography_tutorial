@@ -28,8 +28,8 @@ def start(notebook):
     target_dir = os.path.dirname(notebook)
     if not os.path.isdir(target_dir):
         os.makedirs(target_dir)
-    if not notebook.endswith('ipynb'):
-        notebook += 'ipynb'
+    if not notebook.endswith('.ipynb'):
+        notebook += '.ipynb'
     if not os.path.isfile(notebook):
         source = os.path.join(os.path.dirname(os.path.realpath(__file__)), source_basename)
         # copy the tutorial notebook from the directory of the installed package to the user directory

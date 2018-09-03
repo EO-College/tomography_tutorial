@@ -8,7 +8,7 @@
 
 import os
 import sys
-import mock
+import datetime
 
 # -- Path setup --------------------------------------------------------------
 
@@ -22,8 +22,9 @@ sys.path.insert(0, os.path.abspath('..') + os.sep)
 # -- Project information -----------------------------------------------------
 
 project = 'tomography_tutorial'
-copyright = '2018, Nesrin Salepci, John Truckenbrodt'
 author = 'Nesrin Salepci, John Truckenbrodt'
+year = datetime.datetime.now().year
+copyright = '{}, {}'.format(year, author)
 
 # The short X.Y version
 version = '0.1'
@@ -31,15 +32,10 @@ version = '0.1'
 release = '0.1'
 
 # -- General configuration ---------------------------------------------------
-MOCK_MODULES = ['osgeo', 'numpy', 'scipy', 'scipy.ndimage', 'scipy.ndimage.measurements',
-                'matplotlib', 'matplotlib.pyplot', 'matplotlib.cbook', 'matplotlib.axes',
-                'matplotlib.transforms', 'matplotlib.gridspec', 'matplotlib.artist', 'matplotlib.axis',
-                'IPython', 'IPython.display', 'ipywidgets', 'mpl_toolkits', 'mpl_toolkits.axes_grid1']
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
+autodoc_mock_imports = ['osgeo', 'numpy', 'scipy', 'matplotlib', 'mpl_toolkits', 'IPython', 'ipywidgets']
+
 # If your documentation needs a minimal Sphinx version, state it here.
-#
-# needs_sphinx = '1.0'
+needs_sphinx = '1.6'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -49,8 +45,13 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.coverage',
     'sphinx.ext.imgmath',
+    'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
 ]
+
+intersphinx_mapping = {'python': ('https://docs.python.org/3', None),
+                       'matplotlib': ('https://matplotlib.org', None),
+                       'numpy': ('https://docs.scipy.org/doc/numpy', None)}
 
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True

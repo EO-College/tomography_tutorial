@@ -362,8 +362,7 @@ class GeoViewer(object):
     filename: str
         the name of the file to display
     cmap: str
-        the color map for displaying the image.
-        See `matplotlib.pyplot.imshow <https://matplotlib.org/api/_as_gen/matplotlib.pyplot.imshow.html>`_
+        the color map for displaying the image. See :func:`matplotlib.pyplot.imshow`.
     band_indices: list
         a list of indices for renaming the individual bands in `filename` such that one can scroll trough the
         range of inversion heights, e.g. -70:70, instead of the raw band indices, e.g. 1:140.

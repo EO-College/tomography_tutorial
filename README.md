@@ -32,7 +32,7 @@ As a last step we install the tomography module including its direct Python pack
 dependencies:
 
 ```sh
-sudo python3 -m pip install git+https://github.com/SAR-EDU/tomography_tutorial.git
+sudo python3 -m pip install git+https://github.com/EO-College/tomography_tutorial.git
 ```
 
 #### Windows
@@ -49,7 +49,7 @@ conda install -c conda gdal git
 
 Finally we can install the tutorial package:
 ```sh
-pip install git+https://github.com/SAR-EDU/tomography_tutorial.git
+pip install git+https://github.com/EO-College/tomography_tutorial.git
 ```
 ## Starting the notebook
 

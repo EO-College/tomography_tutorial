@@ -13,7 +13,7 @@ else:
 setup(name='tomography_tutorial',
       packages=find_packages(),
       include_package_data=True,
-      version='0.1',
+      version='0.9',
       description='A tutorial package for Synthetic Aperture Radar Tomography',
       classifiers=[
           'Programming Language :: Python',

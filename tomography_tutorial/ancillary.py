@@ -101,8 +101,9 @@ def lut_crop(lut_rg, lut_az,
              range_min=0, range_max=None,
              azimuth_min=0, azimuth_max=None):
     """
-    compute indices for subsetting the range and azimuth lookup tables (LUTs). The returned slices describe the
-    minimum LUT subset, which contains all radar coordinates within the range-azimuth subset.
+    compute indices for subsetting the range and azimuth lookup tables (LUTs).
+    The returned slices describe the minimum LUT subset,
+    which contains all radar coordinates within the range-azimuth subset.
 
     Parameters
     ----------
@@ -127,7 +128,8 @@ def lut_crop(lut_rg, lut_az,
 
     def get_indices(mask):
         """
-        helper function to get the array slices containing all rows and columns where a binary mask is one/True
+        helper function to get the array slices containing all rows and columns
+        where a binary mask is one/True
         Parameters
         ----------
         mask: numpy.ndarray
@@ -181,8 +183,8 @@ def lut_crop(lut_rg, lut_az,
 
 def geowrite(data, outname, reference, indices, nodata=-99):
     """
-    write an array to a file using an already geocoded file as reference. The output format is either GeoTiff (for
-    2D arrays) or ENVI (for 3D arrays).
+    write an array to a file using an already geocoded file as reference.
+    The output format is either GeoTiff (for 2D arrays) or ENVI (for 3D arrays).
 
     Parameters
     ----------
@@ -193,8 +195,9 @@ def geowrite(data, outname, reference, indices, nodata=-99):
     reference: `gdal.Dataset <https://gdal.org/python/osgeo.gdal.Dataset-class.html>`_
         the geocoded reference dataset
     indices: tuple of slices
-        the slices which define the subset of data in reference, i.e. where is the data located within the reference
-        pixel dimensions; see :func:`lut_crop`
+        the slices which define the subset of data in reference,
+        i.e. where is the data located within the reference pixel dimensions;
+        see :func:`lut_crop`
     nodata: int
         the nodata value to write to the file
 
@@ -252,9 +255,11 @@ def geowrite(data, outname, reference, indices, nodata=-99):
 def geocode(data, lut_rg_name, lut_az_name, outname=None,
             range_min=0, range_max=None, azimuth_min=0, azimuth_max=None):
     """
-    Geocode a radar image using lookup tables. The LUTs are expected to be georeferenced and contain range and
-    azimuth radar coordinates for a specific image data set which is linked to these LUTs. If parameter `data` is a
-    subset of this data set, the pixel coordinates of this subset need to be defined.
+    Geocode a radar image using lookup tables.
+    The LUTs are expected to be georeferenced and contain range and azimuth radar coordinates
+    for a specific image data set which is linked to these LUTs.
+    If parameter `data` is a subset of this data set,
+    the pixel coordinates of this subset need to be defined.
 
     Parameters
     ----------
@@ -265,7 +270,8 @@ def geocode(data, lut_rg_name, lut_az_name, outname=None,
     lut_az_name: str
         the name of the azimuth coordinates lookup table file
     outname: str or None
-        the name of the file to write; if None, the geocoded array is returned and no file is written.
+        the name of the file to write;
+        if None, the geocoded array is returned and no file is written.
         See function :func:`geowrite` for details on how the file is written.
     range_min: int
         the minimum range coordinate
@@ -325,7 +331,7 @@ range_min=200, range_max=400, azimuth_min=0, azimuth_max=100)
     lut_rg_sub = lut_rg_sub - range_min
     lut_az_sub = lut_az_sub - azimuth_min
 
-    ####################################################################################################################
+    ########################################################################################################
     # actual geocoding
 
     # create a mask containing only radar coordinates of the selected subset
@@ -350,7 +356,7 @@ range_min=200, range_max=400, azimuth_min=0, azimuth_max=100)
             sub = data[:, :, i].flatten()[lut_combi]
             sub[mask] = np.nan
             mat_geo[:, :, i] = sub
-    ####################################################################################################################
+    ########################################################################################################
     # write the result to disk
     if outname:
         geowrite(mat_geo, outname, imgfile, indices)

@@ -12,8 +12,8 @@ def start(notebook):
     """
     Create a custom copy of the jupyter notebook with a name defined buy the user and start it.
     The notebook is only copied from the package if it does not yet exist.
-    Jupyter notebook files have the extension '.ipynb'. If the defined notebook does not contain this extension it is
-    appended automatically.
+    Jupyter notebook files have the extension '.ipynb'.
+    If the defined notebook does not contain this extension it is appended automatically.
 
     Parameters
     ----------

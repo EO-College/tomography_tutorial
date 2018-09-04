@@ -124,7 +124,8 @@ class Tomographyplot(object):
     capon_bf_abs: numpy.ndarray
         the absolute result of the capon beam forming inversion
     caponnorm: numpy.ndarray
-        the normalized version of `capon_bf_abs`; see function :func:`~tomography_tutorial.ancillary.normalize`.
+        the normalized version of `capon_bf_abs`;
+        see function :func:`~tomography_tutorial.ancillary.normalize`.
     """
 
     def __init__(self, capon_bf_abs, caponnorm):
@@ -138,14 +139,20 @@ class Tomographyplot(object):
         # widget box setup
 
         # define a slider for changing the horizontal slice image
-        self.slider = IntSlider(min=-self.height, max=self.height, step=10, continuous_update=False,
+        self.slider = IntSlider(min=-self.height,
+                                max=self.height,
+                                step=10,
+                                continuous_update=False,
                                 description='inversion height',
                                 style={'description_width': '140px'},
                                 layout={'width': '400px'})
 
-        self.rangeslider = IntRangeSlider(value=[-self.height, self.height], step=1,
-                                          min=-self.height, max=self.height,
-                                          continuous_update=False, description='inversion height range',
+        self.rangeslider = IntRangeSlider(value=[-self.height, self.height],
+                                          min=-self.height,
+                                          max=self.height,
+                                          step=1,
+                                          continuous_update=False,
+                                          description='inversion height range',
                                           style={'description_width': '140px'},
                                           layout={'width': '400px'})
 
@@ -208,10 +215,14 @@ class Tomographyplot(object):
         # general formatting
 
         # format the cursor value displays
-        self.ax1.format_coord = lambda x, y: 'range={0}, azimuth={1}, reflectivity='.format(int(x), int(y))
-        self.ax2.format_coord = lambda x, y: 'reflectivity={0:.3f}, height={1}'.format(x, int(y))
-        self.ax3.format_coord = lambda x, y: 'range={0}, height={1}, reflectivity='.format(int(x), int(y - self.height))
-        self.ax4.format_coord = lambda x, y: 'range={0}, height={1}, reflectivity='.format(int(x), int(y - self.height))
+        self.ax1.format_coord = lambda x, y: \
+            'range={0}, azimuth={1}, reflectivity='.format(int(x), int(y))
+        self.ax2.format_coord = lambda x, y: \
+            'reflectivity={0:.3f}, height={1}'.format(x, int(y))
+        self.ax3.format_coord = lambda x, y: \
+            'range={0}, height={1}, reflectivity='.format(int(x), int(y - self.height))
+        self.ax4.format_coord = lambda x, y: \
+            'range={0}, height={1}, reflectivity='.format(int(x), int(y - self.height))
 
         # arrange the subplots to make best use of space
         plt.tight_layout(pad=1.0, w_pad=0.1, h_pad=0.1)
@@ -253,7 +264,8 @@ class Tomographyplot(object):
 
     def __rename_sliceplot_ticklabels(self):
         """
-        rename the ticks of the slice plots from pixel coordinates (0:nbands) to inversion height range (-height:height)
+        rename the ticks of the slice plots from pixel coordinates (0:nbands) to
+        inversion height range (-height:height)
 
         Returns
         -------
@@ -289,8 +301,9 @@ class Tomographyplot(object):
 
     def __onslide_range(self, h):
         """
-        respond to changes on the range slider. This changes the displayed y-axis range of the vertical profile and
-        slice plots and renames the tick labels of the
+        respond to changes on the range slider.
+        This changes the displayed y-axis range of the vertical profile and
+        slice plots and renames the tick labels
         Parameters
         ----------
         h
@@ -308,8 +321,8 @@ class Tomographyplot(object):
     def __onclick(self, event):
         """
         respond to mouse clicks in the plot.
-        This function responds to clicks on the first (horizontal slice) plot and updates the vertical profile and
-        slice plots
+        This function responds to clicks on the first (horizontal slice) plot and
+        updates the vertical profile and slice plots
 
         Parameters
         ----------
@@ -364,8 +377,9 @@ class GeoViewer(object):
     cmap: str
         the color map for displaying the image. See :func:`matplotlib.pyplot.imshow`.
     band_indices: list
-        a list of indices for renaming the individual bands in `filename` such that one can scroll trough the
-        range of inversion heights, e.g. -70:70, instead of the raw band indices, e.g. 1:140.
+        a list of indices for renaming the individual bands in `filename` such that one can
+        scroll trough the range of inversion heights, e.g. -70:70, instead of the raw band
+        indices, e.g. 1:140.
         The number of unique elements must of same length as the number of bands in `filename`.
     """
 
@@ -412,7 +426,10 @@ class GeoViewer(object):
             self.indices = range(1, self.bands + 1)
 
         # define a slider for changing a plotted image
-        self.slider = IntSlider(min=min(self.indices), max=max(self.indices), step=1, continuous_update=False,
+        self.slider = IntSlider(min=min(self.indices),
+                                max=max(self.indices),
+                                step=1,
+                                continuous_update=False,
                                 value=self.indices[len(self.indices)//2],
                                 description='band index',
                                 style={'description_width': 'initial'},
@@ -425,7 +442,8 @@ class GeoViewer(object):
         self.ax.get_xaxis().get_major_formatter().set_useOffset(False)
         self.ax.get_yaxis().get_major_formatter().set_useOffset(False)
 
-        self.ax.format_coord = lambda x, y: 'easting={0:.2f}, northing={1:.2f}, reflectivity='.format(x, y)
+        self.ax.format_coord = lambda x, y: \
+            'easting={0:.2f}, northing={1:.2f}, reflectivity='.format(x, y)
 
         # enable interaction with the slider
         out = interactive_output(self.__onslide, {'h': self.slider})

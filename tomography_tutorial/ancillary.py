@@ -44,7 +44,7 @@ def normalize(slice):
 
     Returns
     -------
-    ndarray
+    numpy.ndarray
         the normalized array
     """
     max = np.amax(slice)
@@ -102,7 +102,7 @@ def lut_crop(lut_rg, lut_az,
              azimuth_min=0, azimuth_max=None):
     """
     compute indices for subsetting the range and azimuth lookup tables (LUTs). The returned slices describe the
-    minimum LUT subset, which contains all radar coordinates in the range defined by
+    minimum LUT subset, which contains all radar coordinates within the range-azimuth subset.
 
     Parameters
     ----------
@@ -122,7 +122,7 @@ def lut_crop(lut_rg, lut_az,
     Returns
     -------
     tuple of slices
-        the indices for subsetting: (ymin:ymax, xmin:xmax)
+        the pixel indices for subsetting: (ymin:ymax, xmin:xmax)
     """
 
     def get_indices(mask):
@@ -190,7 +190,7 @@ def geowrite(data, outname, reference, indices, nodata=-99):
         the array to write to the file; must be either 2D or 3D
     outname: str
         the file name
-    reference: gdal.Dataset
+    reference: `gdal.Dataset <https://gdal.org/python/osgeo.gdal.Dataset-class.html>`_
         the geocoded reference dataset
     indices: tuple of slices
         the slices which define the subset of data in reference, i.e. where is the data located within the reference

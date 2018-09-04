@@ -91,7 +91,8 @@ def read_data(input, outname, overwrite=False):
 
 def topo_phase_removal(img_stack, dem_stack, outname, overwrite=False):
     """
-    Removal of Topographical Phase
+    Removal of Topographical Phase.
+    If the target file already exists and ``overwrite=False`` this function acts as a simple file reader.
 
     Parameters
     ----------
@@ -124,7 +125,8 @@ def topo_phase_removal(img_stack, dem_stack, outname, overwrite=False):
 
 def calculate_covariance_matrix(img_stack, outname, kernelsize=10, overwrite=False):
     """
-    compute the covariance matrix
+    compute the covariance matrix.
+    If the target file already exists and ``overwrite=False`` this function acts as a simple file reader.
 
     Parameters
     ----------
@@ -178,7 +180,8 @@ def calculate_covariance_matrix(img_stack, outname, kernelsize=10, overwrite=Fal
 
 def capon_beam_forming_inversion(covmatrix, kz_array, outname, height=70, overwrite=False):
     """
-    perform the capon beam forming inversion to create the final tomographic result
+    perform the capon beam forming inversion to create the final tomographic result.
+    If the target file already exists and ``overwrite=False`` this function acts as a simple file reader.
 
     Parameters
     ----------

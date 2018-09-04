@@ -1,4 +1,4 @@
-[![Documentation Status][1]][2]
+[![Documentation Status][1]][2] [![PyPI version][11]][12]
 
 # EO-College tomography tutorial
 
@@ -55,7 +55,7 @@ python -m pip install tomography_tutorial
 
 ## download of tutorial test data
 Prior to starting the tutorial you need to download and unpack the data found 
-[here][3].
+[here][5].
 
 ## Starting the notebook
 
@@ -89,3 +89,5 @@ The documentation of the package functionality which is used in the notebook can
 [8]: https://eocollege-tomography.readthedocs.io/en/latest/tomography.html#tomography_tutorial.functions.start
 [9]: https://www.gdal.org/
 [10]: https://wiki.ubuntu.com/UbuntuGIS
+[11]: https://badge.fury.io/py/tomography-tutorial.svg
+[12]: https://badge.fury.io/py/tomography-tutorial

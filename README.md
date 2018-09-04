@@ -2,7 +2,7 @@
  
 # EO-College tomography tutorial
 
-This tutorial, developed by the [EO College](https://eo-college.org/landingpage/) learning initiative,
+This tutorial, developed by the [EO-College](https://eo-college.org/landingpage/) learning initiative,
  explores Synthetic Aperture Radar (SAR) tomography 
 with data from DLR's [F-SAR](https://www.dlr.de/hr/en/desktopdefault.aspx/tabid-2326/3776_read-5691) system.
 It consists of a Python package, containing several functions for processing and displaying the data,

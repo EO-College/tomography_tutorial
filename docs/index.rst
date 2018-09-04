@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-EO-college tomography tutorial API documentation
+EO-College tomography tutorial API documentation
 ================================================
 
 .. toctree::

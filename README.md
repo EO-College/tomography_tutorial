@@ -16,7 +16,7 @@ Please mind that this tutorial depends on Python 3.
 
 #### Ubuntu
 
-First we want to install GDAL to read our data. For this we add the ubuntugis package 
+First we want to install [GDAL][9] to read our data. For this we add the [UbuntuGIS][10] package 
 repository so we can install a more recent version than that supplied by Ubuntu.
 After this we install GDAL together with its Python bindings:
 ```sh
@@ -70,7 +70,7 @@ If the directory in which the custom notebook is to be stored does not yet exist
 automatically. Please mind that under Windows paths need to be separated with `\\` or `/`, 
 a single backslash will cause an error.  
 You now have a custom version of the tutorial, 
-which you can modify as you like and restart later via function [start][8].  
+which you can modify as you like and restart later via function `start`.  
 If you want to restore the original notebook, which was delivered with the Python package, just delete 
 your custom version and run function `start` again.  
 
@@ -87,3 +87,5 @@ The documentation of the package functionality which is used in the notebook can
 [6]: https://conda.io/docs/user-guide/install/windows.html
 [7]: https://www.computerhope.com/issues/ch000549.htm
 [8]: https://eocollege-tomography.readthedocs.io/en/latest/tomography.html#tomography_tutorial.functions.start
+[9]: https://www.gdal.org/
+[10]: https://wiki.ubuntu.com/UbuntuGIS

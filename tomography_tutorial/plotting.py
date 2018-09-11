@@ -141,7 +141,7 @@ class Tomographyplot(object):
         # define a slider for changing the horizontal slice image
         self.slider = IntSlider(min=-self.height,
                                 max=self.height,
-                                step=10,
+                                step=1,
                                 continuous_update=False,
                                 description='inversion height',
                                 style={'description_width': '140px'},

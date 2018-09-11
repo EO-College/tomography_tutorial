@@ -22,14 +22,14 @@ sys.path.insert(0, os.path.abspath('..') + os.sep)
 # -- Project information -----------------------------------------------------
 
 project = 'tomography_tutorial'
-author = 'Nesrin Salepci, John Truckenbrodt'
+author = 'Nesrin Salepci, John Truckenbrodt, Robert Eckhardt'
 year = datetime.datetime.now().year
 copyright = '{}, {}'.format(year, author)
 
 # The short X.Y version
-version = '0.9'
+version = '1.0'
 # The full version, including alpha/beta/rc tags
-release = '0.9'
+release = '1.0'
 
 # -- General configuration ---------------------------------------------------
 autodoc_mock_imports = ['osgeo', 'numpy', 'scipy', 'matplotlib', 'mpl_toolkits', 'IPython', 'ipywidgets']

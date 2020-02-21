@@ -6,7 +6,7 @@ This tutorial, developed by the [EO-College][3] learning initiative,
  explores Synthetic Aperture Radar (SAR) tomography 
 with data from DLR's [F-SAR][4] system.
 It consists of a Python package, containing several functions for processing and displaying the data, 
-a Jupyter notebook and a test data set, which can be downloaded [here][5].  
+a Jupyter notebook, a test data set, which can be downloaded [here][5], and a [video tutorial][13].  
 Please follow the steps below to get started.
 
 ## Installation
@@ -91,3 +91,4 @@ The documentation of the package functionality which is used in the notebook can
 [10]: https://wiki.ubuntu.com/UbuntuGIS
 [11]: https://badge.fury.io/py/tomography-tutorial.svg
 [12]: https://badge.fury.io/py/tomography-tutorial
+[13]: https://eo-college.org/resource/sar-tomography-tutorial/

@@ -83,7 +83,7 @@ The documentation of the package functionality which is used in the notebook can
 [2]: http://eocollege-tomography.readthedocs.io/en/latest/?badge=latest
 [3]: https://eo-college.org/landingpage/
 [4]: https://www.dlr.de/hr/en/desktopdefault.aspx/tabid-2326/3776_read-5691
-[5]: https://eo-college.org/Data/Tomography/tomography_data.zip
+[5]: https://cloud.uni-jena.de/s/yz2EcKSqnXTZden/download
 [6]: https://conda.io/docs/user-guide/install/windows.html
 [7]: https://www.computerhope.com/issues/ch000549.htm
 [8]: https://eocollege-tomography.readthedocs.io/en/latest/tomography.html#tomography_tutorial.functions.start

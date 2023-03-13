@@ -5,3 +5,4 @@ dependencies:
   - gdal
   - matplotlib
   - scipy
+  - jupyter

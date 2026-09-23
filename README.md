@@ -9,6 +9,8 @@ It consists of a Python package, containing several functions for processing and
 a Jupyter notebook, a test data set, which can be downloaded [here][5], and a [video tutorial][13].  
 Please follow the steps below to get started.
 
+For questions please contact [Nesrin Salepci](mailto:nesrin@eo-college.org).
+
 ## Installation
 
 The following subsections describe the installation process for different operating systems.
